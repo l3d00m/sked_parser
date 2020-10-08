@@ -1,0 +1,4 @@
+{
+    "python.venvPath": "${workspaceFolder}/.tox",
+    "python.pythonPath": "/bin/python"
+}
