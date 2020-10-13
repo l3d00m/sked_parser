@@ -14,28 +14,41 @@ plans:
   - url: https://stundenplan.ostfalia.de/h/wp/index.html
     faculty: Handel und Soziale Arbeit
     graphical: true
+    degree: Bachelor of Arts
   - url: https://stundenplan.ostfalia.de/i/Semester/Semester-Liste/
     faculty: Informatik
     graphical: false
-#  - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
-#    faculty: Verkehr-Sport-Tourismus-Medien
-#    graphical: true
+  #  - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
+  #    faculty: Verkehr-Sport-Tourismus-Medien
+  #    graphical: true
   - url: https://stundenplan.ostfalia.de/m/sem/index.html
     faculty: Maschinenbau
     graphical: true
   - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
-    faculty: Recht / BELS
+    faculty: Recht
     graphical: true
   - url: https://stundenplan.ostfalia.de/s/wp/index.html
     faculty: Soziale Arbeit
     graphical: false
-#  - url: https://stundenplan.ostfalia.de/v/stundenplan/wing/index.html
-#    faculty: Versorgungstechnik
-#    graphical: true
-  - url: https://stundenplan.ostfalia.de/w/wp/index.html
-    faculty: Wirtschaft
+    degree: Bachelor of Arts
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
+    faculty: Versorgungstechnik
     graphical: true
-
-
-general:
-  base_url: https://stundenplan.ostfalia.de
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/dt/
+    faculty: Versorgungstechnik
+    graphical: true
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/egt/
+    faculty: Versorgungstechnik
+    graphical: true
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/ge/
+    faculty: Versorgungstechnik
+    graphical: true
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/sce/
+    faculty: Versorgungstechnik
+    graphical: true
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/wing/
+    faculty: Versorgungstechnik
+    graphical: true
+#  - url: https://stundenplan.ostfalia.de/w/wp/index.html
+#    faculty: Wirtschaft
+#    graphical: true
