@@ -17,7 +17,7 @@ def get_links(link, auth):
     for this_url in soup.find_all('a', href=True):
         absolute_url = urljoin(link, this_url['href'])
         if valid_url_regex.match(absolute_url):
-            sked_path = absolute_url[len("https://stundenplan.ostfalia.de"):]
+            sked_path = absolute_url[len("https://stundenplan.ostfalia.de/"):]
             tables.append((this_url.text, sked_path))
     return tables
 
@@ -53,7 +53,7 @@ def extract_id(sked_path, faculty):
 
 
 def extract_semester(desc):
-    sem = 0
+    sem = "Ohne Kategorie"
     sem_regex = re.compile(r'(?:- )?(\d)\..*Sem(?:ester|\.)? ?', re.IGNORECASE)
     m = sem_regex.search(desc)
     if m:
@@ -62,11 +62,16 @@ def extract_semester(desc):
     return desc, sem
 
 
-def extract_desc(desc):
+def optimize_label(desc):
     desc = desc.replace('S-', '')
+    desc = desc.replace('I-B.Sc.', '')
+    desc = desc.replace('I-M.Sc.', '')
+    desc = desc.replace('Soziale Arbeit -', '')
+    return desc.strip()
 
-def extract_degree(desc):
-    if "master" in desc.lower():
+
+def extract_degree(desc, link):
+    if "master" in desc.lower() or "m.sc" in desc.lower() or "-m-" in link.lower():
         return "Master"
     else:
         return "Bachelor"

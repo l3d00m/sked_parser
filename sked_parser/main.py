@@ -8,6 +8,7 @@ from sked_parser import scraper
 
 log = logging.getLogger(__name__)
 
+
 def load_yaml_conf():
     with open("config.yaml", 'r') as stream:
         config = yaml.safe_load(stream)
@@ -25,7 +26,7 @@ def main():
     log.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('[%(levelname)s] %(name)s: %(message)s')
     ch.setFormatter(formatter)
     log.addHandler(ch)
 
@@ -33,16 +34,17 @@ def main():
     tables = []
     for plan in config["plans"]:
         tuples = scraper.get_links(plan['url'], secrets['sked'])
-        for desc, sked_path in tuples:
-            degree = scraper.extract_degree(desc)
+        for label, sked_path in tuples:
+            degree = scraper.extract_degree(label, sked_path)
             sked_id = scraper.extract_id(sked_path, plan['faculty'])
-            edited_desc, semester = scraper.extract_semester(desc)
-            tables.append(dict(skedPath=sked_path, label=edited_desc, faculty=plan['faculty'],
+            label, semester = scraper.extract_semester(label)
+            label = scraper.optimize_label(label)
+            tables.append(dict(skedPath=sked_path, label=label, faculty=plan['faculty'],
                                graphical=plan['graphical'], id=sked_id, semester=semester, degree=degree))
     write_json(tables)
 
     for table in tables:
-        print(f"{table['label']}")
+        log.debug(table['label'])
 
 
 if __name__ == "__main__":

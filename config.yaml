@@ -14,23 +14,21 @@ plans:
   - url: https://stundenplan.ostfalia.de/h/wp/index.html
     faculty: Handel und Soziale Arbeit
     graphical: true
-    degree: Bachelor of Arts
   - url: https://stundenplan.ostfalia.de/i/Semester/Semester-Liste/
     faculty: Informatik
     graphical: false
   #  - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
   #    faculty: Verkehr-Sport-Tourismus-Medien
   #    graphical: true
-  - url: https://stundenplan.ostfalia.de/m/sem/index.html
-    faculty: Maschinenbau
-    graphical: true
+  #- url: https://stundenplan.ostfalia.de/m/sem/index.html
+  #  faculty: Maschinenbau
+  #  graphical: true
   - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
     faculty: Recht
     graphical: true
-  - url: https://stundenplan.ostfalia.de/s/wp/index.html
-    faculty: Soziale Arbeit
-    graphical: false
-    degree: Bachelor of Arts
+  #- url: https://stundenplan.ostfalia.de/s/wp/index.html
+  #  faculty: Soziale Arbeit
+  #  graphical: false
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
     faculty: Versorgungstechnik
     graphical: true

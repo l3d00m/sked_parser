@@ -2,10 +2,17 @@
 
 [![image](https://img.shields.io/travis/l3d00m/sked_parser.svg)](https://travis-ci.com/l3d00m/sked_parser)
 
-
 Parses Ostfalia sked timetables into JSON
 
--   Free software: MIT license
+# How it works
+
+## Scraping
+The sked URLs are scraped from the specified timetable overview pages. The link itself and its description is stored.
+
+## Semester
+The current semester is retrived by parsing the stored description with a regex searching for a number followed by Sem. or Semester.
+
+TODO
 
 ## Credits
 
