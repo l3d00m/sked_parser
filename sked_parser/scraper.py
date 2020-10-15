@@ -3,38 +3,50 @@ import re
 from urllib.parse import urljoin
 
 import requests
+import requests_cache
 from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("sked_parser")
+
+# For testing
+requests_cache.install_cache()
 
 
-def get_links(link, auth):
-    resp = requests.get(link, auth=HTTPBasicAuth(auth['user'], auth['pass']))
+def get_links(overview_url, auth):
+    """Scrape all valid timetable URLS from `overview_url`.
+
+    Args:
+        overview_url (str): Faculty timetable overview URL that has all single timetable URLs on it
+        auth (dict): Dict containing `user` and `pass` to access the ostfalia timetable module
+
+    Returns:
+        List[Tuple]: List of tuples with (url description, sked path)
+    """
+    resp = requests.get(overview_url, auth=HTTPBasicAuth(auth['user'], auth['pass']))
     soup = BeautifulSoup(resp.content, 'lxml')
     tables = []
-    valid_url_regex = re.compile(r'^https://stundenplan\.ostfalia\.de/\w/.*\.html$', re.IGNORECASE)
+    valid_url_regex = re.compile(r'^https://stundenplan\.ostfalia\.de/\w/.+\.html$', re.IGNORECASE)
     for this_url in soup.find_all('a', href=True):
-        absolute_url = urljoin(link, this_url['href'])
+        absolute_url = urljoin(overview_url, this_url['href'])
         if valid_url_regex.match(absolute_url):
             sked_path = absolute_url[len("https://stundenplan.ostfalia.de/"):]
             tables.append((this_url.text, sked_path))
     return tables
 
 
-def extract_id(sked_path, faculty):
-    # Get the id from the url, which is the last part excluding the (.).html
-    # Also extract the faculty one character ID
-    id_re = re.compile(r'(\w)\/.*\/(.*?)\.+html', re.IGNORECASE)
+def create_id(sked_path, faculty_short):
+    """Create a unique ID from the `sked_path` (timetable URL) and keep it as short as possible while maintaining readability"""
+    # First, get the basic id from the url page, which is the last part excluding the (.).html
+    id_re = re.compile(r'\w\/.+\/(.+?)\.+html', re.IGNORECASE)
     m = id_re.search(sked_path)
     if not m:
-        log.error(f"Path {sked_path} did not match to ID regex, should not happen")
-        return ""
-    faculty_id = m.group(1).lower()
+        raise Exception(f"Path {sked_path} did not match to ID regex, so we can't extract an ID")
+    sked_id = m.group(1).lower().strip()
 
-    sked_id = m.group(2).lower().strip()
-    # Replace any non alphanumeric chars with underscore
+    # Replace any non alphanumeric chars with underscore and remove duplicated underscores
     sked_id = re.sub(r'\W+', '_', sked_id, flags=re.ASCII)
+    sked_id = sked_id.replace('__', '_')
     # Remove any strings like SoSe, WS, SS including the year from the id
     sked_id = re.sub(r'((s|w)s|(so|w)se)(_?\d+)(_\d+)?_?', '', sked_id)
     sked_id = sked_id.strip("_")
@@ -44,33 +56,71 @@ def extract_id(sked_path, faculty):
     sked_id = sked_id.replace('wirtschaftsingenieur_', '')
     sked_id = sked_id.replace('energie_und_gebaeudetechnik_', '')
     sked_id = sked_id.replace('bio_und_umwelttechnik_', '')
-    sked_id = sked_id.replace('bachelor_', '')
-    sked_id = sked_id.replace('b_sc_', '')
-    faculty_prefix = f"{faculty_id}_"
+    sked_id = sked_id.replace('bachelor', '')
+    sked_id = sked_id.replace('b_sc', '')
+    sked_id = sked_id.replace('semester', '')
+    sked_id = sked_id.replace('energie_', '')
+    sked_id = sked_id.replace('umwelt_', '')
+    # Again remove duplicated underscores that have been introduced by the removals before
+    sked_id = sked_id.replace('__', '_')
+
+    # Prefix the label with the faculty shortcut
+    faculty_prefix = f"{faculty_short}_"
     if not sked_id.startswith(faculty_prefix):
         sked_id = faculty_prefix + sked_id
     return sked_id
 
 
-def extract_semester(desc):
-    sem = "Ohne Kategorie"
-    sem_regex = re.compile(r'(?:- )?(\d)\..*Sem(?:ester|\.)? ?', re.IGNORECASE)
-    m = sem_regex.search(desc)
-    if m:
-        sem = int(m.group(1))
-        desc = sem_regex.sub('', desc).strip()
-    return desc, sem
+def extract_semester(desc, url):
+    """Extract the current semester from the link description or the link using regex."""
+    # Try to extract the semester by finding a number followed by non word characters and something starting with Sem
+    sem_regex = re.compile(r'(\d)\W+Sem', re.IGNORECASE)
+    m_desc = sem_regex.search(desc)
+    m_url = sem_regex.search(url)
+    if m_desc:
+        sem = int(m_desc.group(1))
+    elif m_url:
+        # Only use the semester from URL if description search was unsuccessful
+        sem = int(m_url.group(1))
+    else:
+        sem = "Ohne Semester"
+        log.warn(f"Kein Semester gefunden bei \"{desc}\" mit sked path \"{url}\")")
+    return sem
 
 
-def optimize_label(desc):
+def get_faculty_shortcode(overview_url):
+    """Strip the faculty one letter shortcode from the provided overview url"""
+    shortcode = overview_url.split("/")[3]
+    if len(shortcode) != 1 or not shortcode.isalpha():
+        raise Exception("Could not get faculty shorthand from URL")
+    return shortcode
+
+
+def optimize_label(desc, uses_shorthand_syntax):
+    """Optimize the user visible label by removing faculty names and try to use only the shorthand of that course if possible"""
     desc = desc.replace('S-', '')
-    desc = desc.replace('I-B.Sc.', '')
+    desc = desc.replace('I-', '')
+    desc = desc.replace('B.Sc.', '')
     desc = desc.replace('I-M.Sc.', '')
     desc = desc.replace('Soziale Arbeit -', '')
-    return desc.strip()
+    if uses_shorthand_syntax:
+        # Those faculties writes their modules as "long name (shorthand) additional info"
+        # So discard the long name and use only the shorthand but keep the info
+        shorthand_re = re.compile(r'^.*?\((.*?)\)(.*)$')
+        m = shorthand_re.search(desc)
+        if m:
+            shorthand = m.group(1).strip()
+            additional_stuff = m.group(2).strip()
+            desc = f"{shorthand} {additional_stuff}"
+    # Remove any semester related information
+    desc = re.sub(r'(\d\. ?-)?-? ?\d\.?\W+Sem(?:ester|\.)?', '', desc)
+    # Remove duplicated spaces
+    desc = desc.replace('  ', ' ')
+    return desc.strip("- ")
 
 
-def extract_degree(desc, link):
+def guess_degree(desc, link):
+    """Return an estimation whether it's a master or bachelor degree"""
     if "master" in desc.lower() or "m.sc" in desc.lower() or "-m-" in link.lower():
         return "Master"
     else:

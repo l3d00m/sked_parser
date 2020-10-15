@@ -104,3 +104,6 @@ ENV/
 # Own files
 timetables.json
 secrets.yaml
+
+# For caching
+*.sqlite
