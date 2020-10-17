@@ -1,4 +1,10 @@
 {
     "python.venvPath": "${workspaceFolder}/.tox",
-    "python.pythonPath": "/bin/python"
+    "python.pythonPath": "/bin/python",
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true
 }

@@ -19,7 +19,7 @@ def main(config, secrets, out_file="timetables.json"):
             faculty_short = scraper.get_faculty_shortcode(plan['url'])
             degree = scraper.guess_degree(label, sked_path)
             sked_id = scraper.create_id(sked_path, faculty_short)
-            semester = scraper.extract_semester(label, sked_path)
+            semester = scraper.extract_semester(label, sked_path) or "Ohne Semester"
             label = scraper.optimize_label(label, plan.get('shorthand_syntax', False))
             is_graphical = plan.get('graphical', True)
             tables.append(dict(skedPath=sked_path, label=label, faculty=plan['faculty'],
@@ -29,6 +29,6 @@ def main(config, secrets, out_file="timetables.json"):
     log.info(f"Successfully parsed {len(tables)} timetables and wrote them to {out_file}.")
 
     for table in tables:
-        #print(table['label'])
+        # print(table['label'])
         pass
     return 0

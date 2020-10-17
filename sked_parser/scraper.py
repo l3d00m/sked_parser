@@ -3,14 +3,14 @@ import re
 from urllib.parse import urljoin
 
 import requests
-import requests_cache
 from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
 
-log = logging.getLogger("sked_parser")
+# Helpful for testing
+# import requests_cache
+# requests_cache.install_cache()
 
-# For testing
-requests_cache.install_cache()
+log = logging.getLogger("sked_parser")
 
 
 def get_links(overview_url, auth):
@@ -74,7 +74,7 @@ def create_id(sked_path, faculty_short):
 def extract_semester(desc, url):
     """Extract the current semester from the link description or the link using regex."""
     # Try to extract the semester by finding a number followed by non word characters and something starting with Sem
-    sem_regex = re.compile(r'(\d)\W+Sem', re.IGNORECASE)
+    sem_regex = re.compile(r'(?:^|\D)(\d)\W+Sem', re.IGNORECASE)
     m_desc = sem_regex.search(desc)
     m_url = sem_regex.search(url)
     if m_desc:
@@ -83,8 +83,8 @@ def extract_semester(desc, url):
         # Only use the semester from URL if description search was unsuccessful
         sem = int(m_url.group(1))
     else:
-        sem = "Ohne Semester"
-        log.warn(f"Kein Semester gefunden bei \"{desc}\" mit sked path \"{url}\")")
+        sem = None
+        log.warning(f"Kein Semester gefunden bei \"{desc}\" mit sked path \"{url}\")")
     return sem
 
 
@@ -106,7 +106,7 @@ def optimize_label(desc, uses_shorthand_syntax):
     if uses_shorthand_syntax:
         # Those faculties writes their modules as "long name (shorthand) additional info"
         # So discard the long name and use only the shorthand but keep the info
-        shorthand_re = re.compile(r'^.*?\((.*?)\)(.*)$')
+        shorthand_re = re.compile(r'^.*?\((\D+?)\)(.*)$')
         m = shorthand_re.search(desc)
         if m:
             shorthand = m.group(1).strip()
