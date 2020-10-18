@@ -6,9 +6,9 @@ from sked_parser import scraper
 log = logging.getLogger("sked_parser")
 
 
-def write_timetable_json(tables, out_file):
-    with open("timetables.json", 'w') as outfile:
-        json.dump(tables, outfile, indent=2, ensure_ascii=False)
+def write_timetable_json(tables, file_path):
+    with open(file_path, 'w') as f:
+        json.dump(tables, f, indent=2, ensure_ascii=False)
 
 
 def main(config, secrets, out_file="timetables.json"):

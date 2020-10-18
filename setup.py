@@ -28,7 +28,7 @@ setup(
     description="Parses Ostfalia sked timetables into JSON",
     entry_points={
         'console_scripts': [
-            'sked_parser=sked_parser.cli:main',
+            'sked-parser=sked_parser.__main__:main',
         ],
     },
     install_requires=requirements,
