@@ -47,6 +47,15 @@ def test_extract_semester_multiple_semesters():
     assert extract_semester(sem_str, "") == 4
 
 
+def test_extract_semester_wahlpflicht():
+    """Test that "Wahlpflichtfächer" are correctly identified"""
+    sem_str = "Management im Gesundheitswesen Wahlpflichtangebot"
+    assert extract_semester(sem_str, "") == "WPF"
+    # Also make sure to return WPF even if a semester is given
+    sem_str = "Wahlpflichtangebot (WPF MIG) 5. und höhere Sem."
+    assert extract_semester(sem_str, "") == "WPF"
+
+
 def test_extract_semester_url_fallback():
     """Test that URL parsing is used when no desc is provided"""
     url_str = "i/Semester/Semester-Liste/I-B.Sc. WI 1. Sem..html"

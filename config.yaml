@@ -1,3 +1,4 @@
+current_sem: "ws20"
 plans:
   - url: https://stundenplan.ostfalia.de/b/wp/index.html
     faculty: Bau-Wasser-Boden

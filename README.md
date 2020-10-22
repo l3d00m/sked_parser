@@ -26,6 +26,7 @@ plans:
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
     faculty: Versorgungstechnik
     shorthand_syntax: True # Optional, defaults to false. See section shorthand syntax further below.
+current_sem: "ws20" # Current semester string that will be appended to the IDs (to have unique IDs for each semester)
 ```
 
 
