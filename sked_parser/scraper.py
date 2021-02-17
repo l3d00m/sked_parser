@@ -3,14 +3,15 @@ import re
 from urllib.parse import urljoin
 
 import requests
+import requests_cache
 from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
 
-# Helpful for testing
-# import requests_cache
-# requests_cache.install_cache()
-
 log = logging.getLogger("sked_parser")
+
+
+# Install request cache with 10 minute expiration time to avoid spamming requests
+requests_cache.install_cache(expire_after=600)
 
 
 def get_links(overview_url, auth):
@@ -21,17 +22,17 @@ def get_links(overview_url, auth):
         auth (dict): Dict containing `user` and `pass` to access the ostfalia timetable module
 
     Returns:
-        List[Tuple]: List of tuples with (url description, sked path)
+        Set[Tuple]: List of tuples with (url description, sked path)
     """
     resp = requests.get(overview_url, auth=HTTPBasicAuth(auth['user'], auth['pass']))
     soup = BeautifulSoup(resp.content, 'lxml')
-    tables = []
+    tables = set()
     valid_url_regex = re.compile(r'^https://stundenplan\.ostfalia\.de/\w/.+\.html$', re.IGNORECASE)
     for this_url in soup.find_all('a', href=True):
         absolute_url = urljoin(overview_url, this_url['href'])
         if valid_url_regex.match(absolute_url):
             sked_path = absolute_url[len("https://stundenplan.ostfalia.de/"):]
-            tables.append((this_url.text, sked_path))
+            tables.add((this_url.text, sked_path))
     return tables
 
 
@@ -58,6 +59,7 @@ def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
     sked_id = sked_id.replace('bio_und_umwelttechnik_', '')
     sked_id = sked_id.replace('bachelor', '')
     sked_id = sked_id.replace('b_sc', '')
+    sked_id = sked_id.replace('m_sc', 'm')
     sked_id = sked_id.replace('semester_', '')
     sked_id = sked_id.replace('energie_', '')
     sked_id = sked_id.replace('umwelt_', '')
@@ -93,15 +95,15 @@ def extract_semester(desc, url):
     if m_desc:
         return int(m_desc.group(1))
     elif m_url:
-        # Only use the semester from URL if description search was unsuccessful
+        # Use the semester from URL if description search was unsuccessful
         return int(m_url.group(1))
     else:
-        log.warning(f"Kein Semester bestimmbar bei \"{desc}\" mit sked path \"{url}\")")
+        log.warning(f"Kein Semester bestimmbar bei \"{desc}\" mit sked path \"{url}\"")
         return None
 
 
 def get_faculty_shortcode(overview_url):
-    """Strip the faculty one letter shortcode from the provided overview url"""
+    """Extract the faculty one letter shortcode from the provided overview url"""
     shortcode = overview_url.split("/")[3]
     if len(shortcode) != 1 or not shortcode.isalpha():
         raise Exception("Could not get faculty shorthand from URL")

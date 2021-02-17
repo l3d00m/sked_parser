@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['bs4', 'lxml', 'pyyaml', 'jsonpickle']
+requirements = ['bs4', 'lxml', 'pyyaml', 'jsonpickle', 'requests_cache']
 
 setup_requirements = ['pytest-runner', ]
 

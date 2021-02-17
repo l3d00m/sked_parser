@@ -1,6 +1,5 @@
 {
     "python.venvPath": "${workspaceFolder}/.tox",
-    "python.pythonPath": "/bin/python",
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
@@ -12,5 +11,6 @@
         "en-US": [
             "Ostfalia"
         ]
-    }
+    },
+    "editor.formatOnSave": true
 }

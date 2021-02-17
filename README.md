@@ -8,9 +8,9 @@ Parses Ostfalia University [`sked`](https://www.sked.de/) timetables into a JSON
 
 1. Install python>=3.8, git and pip
 2. Clone this repository: `git clone git@github.com:l3d00m/sked_parser.git` and `cd sked_parser`.
-2. Install the tool with pip from the cloned (i.e. current) folder: `python -m pip install .`.
+2. Install the tool with pip from the cloned (i.e. current) folder: `python -m pip install .` or `python -m pip install -e .` when developing.
 3. Copy `secrets.example.yaml` into `secrets.yaml` and fill it with your Ostfalia credentials.
-4. Modify `config.yaml` with your timetable URLs. See below for syntax reference.
+4. Modify `config.yaml` with the current timetable URLs. See below for syntax reference.
 5. Run the tool by executing `sked-parser`. It'll then create the desired `timetables.json`.
 
 ## `config.yaml` syntax reference
@@ -22,11 +22,11 @@ plans:
     faculty: Elektrotechnik # Required, faculty name which will be displayed to the user on spluseins.de
   - url: https://stundenplan.ostfalia.de/i/Semester/Semester-Liste/
     faculty: Informatik
-    graphical: false # Optional, defaults to true. Only needs to be specified if the timetables are in "list" form.
+    graphical: false # Optional, defaults to true. Only needs to be specified as false if the timetables are in "list" form.
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
     faculty: Versorgungstechnik
     shorthand_syntax: True # Optional, defaults to false. See section shorthand syntax further below.
-current_sem: "ws20" # Current semester string that will be appended to the IDs (to have unique IDs for each semester)
+current_sem: "ss21" # Current semester string that will be appended to the IDs (to have unique IDs for each semester)
 ```
 
 
@@ -35,7 +35,7 @@ current_sem: "ws20" # Current semester string that will be appended to the IDs (
 usage: `sked-parser [-h] [-c CONFIG_FILE] [-s SECRETS_FILE] [-o OUT_FILE]`
 
 * `-c CONFIG_FILE`: Path to the main YAML configuration file (default: `config.yaml` in current directory)
-* `-s SECRETS_FILe` Path to the YAML secrets file containing ostfalia user and password (default: `secrets.yaml` in current directory)
+* `-s SECRETS_FILe` Path to the YAML secrets file containing Ostfalia user and password (default: `secrets.yaml` in current directory)
 * `-o OUT_FILE` Where to store the resulting JSON file (default: `timetables.json` in current directory)
 
 

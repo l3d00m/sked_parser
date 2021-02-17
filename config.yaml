@@ -1,49 +1,50 @@
-current_sem: "ws20"
+current_sem: "ss21"
 plans:
-  - url: https://stundenplan.ostfalia.de/b/wp/index.html
-    faculty: Bau-Wasser-Boden
-  # Wird manuell gepflegt:
-  #- url: https://stundenplan.ostfalia.de/e/
-  #  faculty: Elektrotechnik
-  # Haben nur PDFs (why????):
-  #- url: https://stundenplan.ostfalia.de/f/wp/index.html
-  #  faculty: Fahrzeugtechnik
+  # Neue komische Website
+  # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
+  #   faculty: Bau-Wasser-Boden
+  # Nur alte Pläne bisher
+  # - url: https://stundenplan.ostfalia.de/e/
+  #   faculty: Elektrotechnik
+  # Haben nur PDFs, die Pläne sind zwar online aber von 2019/20!
+  # - url: https://stundenplan.ostfalia.de/f/wp/index.html
+  #   faculty: Fahrzeugtechnik
   - url: https://stundenplan.ostfalia.de/g/wp/index.html
     faculty: Gesundheitswesen
     shorthand_syntax: True
   - url: https://stundenplan.ostfalia.de/h/wp/index.html
     faculty: Handel und Soziale Arbeit
-  # wird manuell gepflegt:
-  #- url: https://stundenplan.ostfalia.de/i/Semester/Semester-Liste/
-  #  faculty: Informatik
-  #  graphical: false
-  # Die übersichsseite ist schrott und deshalb zu hart automatisch zu parsen mit diesem Tool:
-  #- url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
+  # Hat noch keine Pläne
+  # - url: https://stundenplan.ostfalia.de/i/Semester/Semester-Liste/
+  #   faculty: Informatik
+  #   graphical: false
+  # Haben scheinbar auf PDFs umgestellt
+  # - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
   #  faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
-  #- url: https://stundenplan.ostfalia.de/m/sem/index.html
+  # - url: https://stundenplan.ostfalia.de/m/sem/index.html
   #  faculty: Maschinenbau
   - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
     faculty: Recht
-  # Haben natürlich nur pdfs...:
-  #- url: https://stundenplan.ostfalia.de/s/wp/index.html
-  #  faculty: Soziale Arbeit
-  #  graphical: false
+  - url: https://stundenplan.ostfalia.de/s/wp/index.html
+    faculty: Soziale Arbeit
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
     faculty: Versorgungstechnik
     shorthand_syntax: True
-  - url: https://stundenplan.ostfalia.de/v/stundenplan/dt/
-    faculty: Versorgungstechnik
-    shorthand_syntax: True
+  # Keine Pläne bisher
+  # - url: https://stundenplan.ostfalia.de/v/stundenplan/dt/
+  #   faculty: Versorgungstechnik
+  #   shorthand_syntax: True
   - url: https://stundenplan.ostfalia.de/v/stundenplan/egt/
     faculty: Versorgungstechnik
     shorthand_syntax: True
-  - url: https://stundenplan.ostfalia.de/v/stundenplan/ge/
-    faculty: Versorgungstechnik
-    shorthand_syntax: True
-  - url: https://stundenplan.ostfalia.de/v/stundenplan/sce/
-    faculty: Versorgungstechnik
-    shorthand_syntax: True
+  # Keine Pläne bisher
+  # - url: https://stundenplan.ostfalia.de/v/stundenplan/ge/
+  #   faculty: Versorgungstechnik
+  #   shorthand_syntax: True
+  # - url: https://stundenplan.ostfalia.de/v/stundenplan/sce/
+  #   faculty: Versorgungstechnik
+  #   shorthand_syntax: True
   - url: https://stundenplan.ostfalia.de/v/stundenplan/wing/
     faculty: Versorgungstechnik
     shorthand_syntax: True
