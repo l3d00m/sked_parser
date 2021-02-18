@@ -1,4 +1,4 @@
-from sked_parser.scraper import extract_semester, optimize_label
+from sked_parser.scraper import create_id, extract_semester, optimize_label
 
 
 def test_extract_semester_normal():
@@ -95,3 +95,30 @@ def test_optimize_label_shorthand_strip():
     # Shorthand string with numbers in it should not be replaced/used
     in_str = "Vertiefung CE (PO18)"
     assert optimize_label(in_str, True) == "Vertiefung CE (PO18)"
+
+
+def test_extract_id():
+    """Verify that the ID extraction works correctly"""
+    faculty_short = "e"
+    current_sem_str = "ws"
+    extracted_semester = 1
+    def sked_path(part_str): return f"e/semester/{part_str}.html"
+
+    # Simple string
+    in_str = "eit"
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_eit_1_ws"
+    # Dot at end
+    in_str = "eit."
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_eit_1_ws"
+    # Duplicated semester
+    in_str = "RPP_1_1. Sem"
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_rpp_1_ws"
+    # Faculty shortname already present
+    in_str = "E-eit"
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_eit_1_ws"
+    # Mutliple special chars
+    in_str = "b-.-eit"
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_b_eit_1_ws"
+    # Complicated semester specification
+    in_str = "PSA_M_1. Semester_Schwerpunkt"
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_psa_m_schwerpunkt_1_ws"

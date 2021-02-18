@@ -39,7 +39,7 @@ def get_links(overview_url, auth):
 def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
     """Create a unique ID from the `sked_path` (timetable URL) and keep it as short as possible while maintaining readability"""
     # First, get the basic id from the url page, which is the last part excluding the (.).html
-    id_re = re.compile(r'\w\/.+\/(.+?)\.+html', re.IGNORECASE)
+    id_re = re.compile(r'\w/.+/(.+?)\.+html', re.IGNORECASE)
     m = id_re.search(sked_path)
     if not m:
         raise Exception(f"Path {sked_path} did not match to ID regex, so we can't extract an ID")
@@ -47,12 +47,15 @@ def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
 
     # Replace any non alphanumeric chars with underscore and remove duplicated underscores
     sked_id = re.sub(r'\W+', '_', sked_id, flags=re.ASCII)
-    sked_id = sked_id.replace('__', '_')
+    sked_id = sked_id = re.sub(r'_+(?=_|$)', '', sked_id)
+
     # Remove any strings like SoSe, WS, SS including the year from the id
     sked_id = re.sub(r'((s|w)s|(so|w)se)(_?\d+)(_\d+)?_?', '', sked_id)
-    sked_id = sked_id.strip("_")
 
     # Remove some faculty specific stuff to shorten the id:
+    sked_id = sked_id.replace('semester_', '')
+    sked_id = sked_id.replace('_semester', '')
+    sked_id = sked_id.replace('_sem', '')
     sked_id = sked_id.replace('soziale_arbeit', '')
     sked_id = sked_id.replace('wirtschaftsingenieur_', '')
     sked_id = sked_id.replace('energie_und_gebaeudetechnik_', '')
@@ -60,26 +63,27 @@ def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
     sked_id = sked_id.replace('bachelor', '')
     sked_id = sked_id.replace('b_sc', '')
     sked_id = sked_id.replace('m_sc', 'm')
-    sked_id = sked_id.replace('semester_', '')
     sked_id = sked_id.replace('energie_', '')
     sked_id = sked_id.replace('umwelt_', '')
-    sked_id = sked_id.replace('_sem', '')
-    # Again remove duplicated underscores that have been introduced by the removals before
-    sked_id = sked_id.replace('__', '_')
+    sked_id = sked_id.replace('stdgrp_', '')
+    # Remove unneccessary chars at end or beginning of string
     sked_id = sked_id.strip("_ ")
 
     if (isinstance(extracted_semester, int)):
         # If semester was successfully extracted, scrape all single digits from ID and add extracted semester back
-        sked_id = re.sub(f"_{extracted_semester}" + r'(?=_|$)', '', sked_id)
+        sked_id = re.sub(r'(?<!\d)' + f"{extracted_semester}" + r'(?=_|$)', '', sked_id)
         sked_id = f"{sked_id}_{extracted_semester}"
 
     # Prefix the label with the faculty shortcut
     faculty_prefix = f"{faculty_short}_"
     if not sked_id.startswith(faculty_prefix):
         sked_id = faculty_prefix + sked_id
+
     # Append the current semester string (sth like ws20) at the end
     sked_id = f"{sked_id}_{current_sem_str}"
-    return sked_id.lower()
+    # Again remove duplicated underscores that have been introduced by the removals before
+    sked_id = re.sub(r'_+(?=_|$)', '', sked_id)
+    return sked_id
 
 
 def extract_semester(desc, url):
@@ -135,7 +139,7 @@ def optimize_label(desc, uses_shorthand_syntax):
 
 def guess_degree(desc, link):
     """Return an estimation whether it's a master or bachelor degree"""
-    if "master" in desc.lower() or "m.sc" in desc.lower() or "-m-" in link.lower():
+    if "master" in desc.lower() or "m.sc" in desc.lower() or "-m-" in link.lower() or "imes" in desc.lower():
         return "Master"
     else:
         return "Bachelor"
