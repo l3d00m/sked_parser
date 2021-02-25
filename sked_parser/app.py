@@ -41,7 +41,7 @@ def main(config, secrets, out_file="timetables.json"):
         if len(tuples) == 0:
             log.warning(f"URL {plan['url']} hat keine Pläne.")
         for label, sked_path in tuples:
-            faculty_short = scraper.get_faculty_shortcode(plan['url'])
+            faculty_short = scraper.get_faculty_shortcode(sked_path)
             degree = scraper.guess_degree(label, sked_path)
             semester = scraper.extract_semester(label, sked_path) or "Sonstige"
             sked_id = scraper.create_id(sked_path, faculty_short, config['current_sem'], semester)
@@ -51,6 +51,8 @@ def main(config, secrets, out_file="timetables.json"):
                                graphical=is_graphical, id=sked_id, semester=semester, degree=degree))
 
     tables = list(filter(is_valid_item, tables))
+    # Sort first by faculty, then by master/bachelor and then by semester
+    tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester'])))
     raise_for_duplicated_ids(tables)
     write_timetable_json(tables, out_file)
 

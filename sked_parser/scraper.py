@@ -27,12 +27,12 @@ def get_links(overview_url, auth):
     resp = requests.get(overview_url, auth=HTTPBasicAuth(auth['user'], auth['pass']))
     soup = BeautifulSoup(resp.content, 'lxml')
     tables = set()
-    valid_url_regex = re.compile(r'^https://stundenplan\.ostfalia\.de/\w/.+\.html$', re.IGNORECASE)
+    valid_url_regex = re.compile(r'^\w/.+\.html$', re.IGNORECASE)
     for this_url in soup.find_all('a', href=True):
         absolute_url = urljoin(overview_url, this_url['href'])
-        if valid_url_regex.match(absolute_url):
-            sked_path = absolute_url[len("https://stundenplan.ostfalia.de/"):]
-            tables.add((this_url.text, sked_path))
+        part_url = absolute_url.removeprefix("https://stundenplan.ostfalia.de/")
+        if valid_url_regex.match(part_url):
+            tables.add((this_url.text, part_url))
     return tables
 
 
@@ -108,7 +108,7 @@ def extract_semester(desc, url):
 
 def get_faculty_shortcode(overview_url):
     """Extract the faculty one letter shortcode from the provided overview url"""
-    shortcode = overview_url.split("/")[3]
+    shortcode = overview_url.split("/")[0]
     if len(shortcode) != 1 or not shortcode.isalpha():
         raise Exception("Could not get faculty shorthand from URL")
     return shortcode
