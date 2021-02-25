@@ -16,14 +16,14 @@ test_requirements = ['pytest>=3', ]
 setup(
     author="l3d00m",
     author_email='substantialimpulse@pm.me',
-    python_requires='>=3.8',
+    python_requires='>=3.9',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     description="Parses Ostfalia sked timetables into JSON",
     entry_points={
