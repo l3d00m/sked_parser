@@ -46,13 +46,13 @@ def main(config, secrets, out_file="timetables.json"):
             semester = scraper.extract_semester(label, sked_path) or "Sonstige"
             sked_id = scraper.create_id(sked_path, faculty_short, config['current_sem'], semester)
             label = scraper.optimize_label(label, plan.get('shorthand_syntax', False))
-            is_graphical = plan.get('graphical', True)
+            plan_type = plan.get('type', 'graphical')
             tables.append(dict(skedPath=sked_path, label=label, faculty=plan['faculty'],
-                               graphical=is_graphical, id=sked_id, semester=semester, degree=degree))
+                               type=plan_type, id=sked_id, semester=semester, degree=degree))
 
     tables = list(filter(is_valid_item, tables))
-    # Sort first by faculty, then by master/bachelor and then by semester
-    tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester'])))
+    # Sort first by faculty, then by master/bachelor, then by semester and last by alphabetical label
+    tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester']), x['label']))
     raise_for_duplicated_ids(tables)
     write_timetable_json(tables, out_file)
 

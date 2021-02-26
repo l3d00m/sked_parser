@@ -23,7 +23,7 @@ plans:
       faculty: Elektrotechnik # Required, faculty name which will be displayed to the user on spluseins.de
     - url: https://stundenplan.ostfalia.de/i/Semester/Semester-Liste/
       faculty: Informatik
-      graphical: false # Optional, defaults to true. Only needs to be specified as false if the timetables are in "list" form.
+      type: "list" # Optional, defaults to 'graphical'. Only needs to be specified as 'list' if the timetables are in list form or as 'csv' if the timetables are stored as CSV.
     - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
       faculty: Versorgungstechnik
       shorthand_syntax: True # Optional, defaults to false. See section shorthand syntax further below.

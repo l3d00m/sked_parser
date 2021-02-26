@@ -1,6 +1,6 @@
 import logging
 import re
-from urllib.parse import urljoin
+from urllib.parse import unquote, urljoin
 
 import requests
 import requests_cache
@@ -27,7 +27,7 @@ def get_links(overview_url, auth):
     resp = requests.get(overview_url, auth=HTTPBasicAuth(auth['user'], auth['pass']))
     soup = BeautifulSoup(resp.content, 'lxml')
     tables = set()
-    valid_url_regex = re.compile(r'^\w/.+\.html$', re.IGNORECASE)
+    valid_url_regex = re.compile(r'^\w/.+\.(html|csv)$', re.IGNORECASE)
     for this_url in soup.find_all('a', href=True):
         absolute_url = urljoin(overview_url, this_url['href'])
         part_url = absolute_url.removeprefix("https://stundenplan.ostfalia.de/")
@@ -38,8 +38,10 @@ def get_links(overview_url, auth):
 
 def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
     """Create a unique ID from the `sked_path` (timetable URL) and keep it as short as possible while maintaining readability"""
-    # First, get the basic id from the url page, which is the last part excluding the (.).html
-    id_re = re.compile(r'\w/.+/(.+?)\.+html', re.IGNORECASE)
+    # Unqoute the URL first
+    sked_path = unquote(sked_path)
+    # Get a basic id from the url page, which is the last part excluding the .extension
+    id_re = re.compile(r'\w/.+/(.+?)\.+(html|csv)', re.IGNORECASE)
     m = id_re.search(sked_path)
     if not m:
         raise Exception(f"Path {sked_path} did not match to ID regex, so we can't extract an ID")
@@ -121,6 +123,7 @@ def optimize_label(desc, uses_shorthand_syntax):
     desc = desc.replace('B.Sc.', '')
     desc = desc.replace('I-M.Sc.', '')
     desc = desc.replace('Soziale Arbeit -', '')
+    desc = desc.replace('.csv', '')
     if uses_shorthand_syntax:
         # Those faculties writes their modules as "long name (shorthand) additional info"
         # So discard the long name and use only the shorthand but keep the info
@@ -134,7 +137,7 @@ def optimize_label(desc, uses_shorthand_syntax):
     desc = re.sub(r'(\d\. ?-)?-? ?\d\.?\W+Sem(?:ester|\.)?', '', desc)
     # Remove duplicated spaces
     desc = desc.replace('  ', ' ')
-    return desc.strip("- ")
+    return desc.strip("-_ ")
 
 
 def guess_degree(desc, link):
