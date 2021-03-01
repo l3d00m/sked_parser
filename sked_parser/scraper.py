@@ -14,12 +14,13 @@ log = logging.getLogger("sked_parser")
 requests_cache.install_cache(expire_after=600)
 
 
-def get_links(overview_url, auth):
+def get_links(overview_url, auth, faculty=""):
     """Scrape all valid timetable URLS from `overview_url`.
 
     Args:
         overview_url (str): Faculty timetable overview URL that has all single timetable URLs on it
         auth (dict): Dict containing `user` and `pass` to access the ostfalia timetable module
+        faculty (str): Faculty name. Is used for applying special scrapers based on the faculty. Defaults to "".
 
     Returns:
         Set[Tuple]: List of tuples with (url description, sked path)
@@ -32,7 +33,11 @@ def get_links(overview_url, auth):
         absolute_url = urljoin(overview_url, this_url['href'])
         part_url = absolute_url.removeprefix("https://stundenplan.ostfalia.de/")
         if valid_url_regex.match(part_url):
-            tables.add((this_url.text, part_url))
+            desc = this_url.text.strip()
+            if "Tourismus" in faculty:
+                # Prepend the content of the previous paragraph to the description because it contains the real name of the plan
+                desc = this_url.find_previous("p").text.strip() + " " + desc
+            tables.add((desc, part_url))
     return tables
 
 
@@ -67,7 +72,8 @@ def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
     sked_id = sked_id.replace('m_sc', 'm')
     sked_id = sked_id.replace('energie_', '')
     sked_id = sked_id.replace('umwelt_', '')
-    sked_id = sked_id.replace('stdgrp_', '')
+    sked_id = sked_id.replace('stdgrp_', '')  # weird faculty S specific string
+    sked_id = sked_id.replace('stjg_', '')  # weird faculty K specific string
     # Remove unneccessary chars at end or beginning of string
     sked_id = sked_id.strip("_ ")
 
@@ -108,11 +114,11 @@ def extract_semester(desc, url):
         return None
 
 
-def get_faculty_shortcode(overview_url):
-    """Extract the faculty one letter shortcode from the provided overview url"""
-    shortcode = overview_url.split("/")[0]
+def get_faculty_shortcode(sked_path):
+    """Extract the faculty one letter shortcode from the provided sked path"""
+    shortcode = sked_path.split("/")[0]
     if len(shortcode) != 1 or not shortcode.isalpha():
-        raise Exception("Could not get faculty shorthand from URL")
+        raise Exception("Could not get faculty shorthand from sked path")
     return shortcode
 
 
@@ -124,6 +130,7 @@ def optimize_label(desc, uses_shorthand_syntax):
     desc = desc.replace('I-M.Sc.', '')
     desc = desc.replace('Soziale Arbeit -', '')
     desc = desc.replace('.csv', '')
+    desc = re.sub(r'\s+', ' ', desc)  # replace all (even duplicated) whitespaces by single space
     if uses_shorthand_syntax:
         # Those faculties writes their modules as "long name (shorthand) additional info"
         # So discard the long name and use only the shorthand but keep the info
@@ -142,7 +149,11 @@ def optimize_label(desc, uses_shorthand_syntax):
 
 def guess_degree(desc, link):
     """Return an estimation whether it's a master or bachelor degree"""
-    if "master" in desc.lower() or "m.sc" in desc.lower() or "-m-" in link.lower() or "imes" in desc.lower():
+    link = link.lower()
+    if "master" in desc.lower() or "m.sc" in desc.lower() or "imes" in desc.lower():
+        return "Master"
+    if "-m-" in link or "_m_" in link:
+        log.info(f"Master vermutet für '{desc}'. Bitte manuell überprüfen, dass es kein Bachelor ist. Link ist {link}.")
         return "Master"
     else:
         return "Bachelor"

@@ -30,6 +30,8 @@ plans:
 current_sem: "ss21" # Current semester string that will be appended to the IDs (to have unique IDs for each semester)
 ```
 
+Refer to the [SplusEins Documentation](https://spluseins-i.ostfalia.de/docs/semesterbeginn.html#aktualisierung-der-plane) for details on the resulting JSON format.
+
 ## Command line options
 
 usage: `sked-parser [-h] [-c CONFIG_FILE] [-s SECRETS_FILE] [-o OUT_FILE]`

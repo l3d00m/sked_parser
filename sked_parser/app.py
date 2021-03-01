@@ -9,6 +9,7 @@ log = logging.getLogger("sked_parser")
 def write_timetable_json(tables, file_path):
     with open(file_path, 'w') as f:
         json.dump(tables, f, indent=2, ensure_ascii=False)
+        f.write('\n')
 
 
 def raise_for_duplicated_ids(dict_to_check):
@@ -37,7 +38,7 @@ def is_valid_item(table):
 def main(config, secrets, out_file="timetables.json"):
     tables = []
     for plan in config["plans"]:
-        tuples = scraper.get_links(plan['url'], secrets['sked'])
+        tuples = scraper.get_links(plan['url'], secrets['sked'], plan['faculty'])
         if len(tuples) == 0:
             log.warning(f"URL {plan['url']} hat keine Pläne.")
         for label, sked_path in tuples:
