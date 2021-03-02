@@ -142,6 +142,8 @@ def optimize_label(desc, uses_shorthand_syntax):
             desc = f"{shorthand} {additional_stuff}"
     # Remove any semester related information
     desc = re.sub(r'(\d\. ?-)?-? ?\d\.?\W+Sem(?:ester|\.)?', '', desc)
+    # Strip any remaining single digits
+    desc = re.sub(r'[_-]\d(?=_|$)', '', desc)
     # Remove duplicated spaces
     desc = desc.replace('  ', ' ')
     return desc.strip("-_ ")
@@ -153,6 +155,8 @@ def guess_degree(desc, link):
     if "master" in desc.lower() or "m.sc" in desc.lower() or "imes" in desc.lower():
         return "Master"
     if "-m-" in link or "_m_" in link:
+        if "studienprofil m" in desc.lower():
+            return "Bachelor"
         log.info(f"Master vermutet für '{desc}'. Bitte manuell überprüfen, dass es kein Bachelor ist. Link ist {link}.")
         return "Master"
     else:

@@ -13,10 +13,9 @@ plans:
     shorthand_syntax: True
   - url: https://stundenplan.ostfalia.de/h/wp/index.html
     faculty: Handel und Soziale Arbeit
-  # Hat noch keine Pläne
-  # - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
-  #   faculty: Informatik
-  #   type: "csv"
+  - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
+    faculty: Informatik
+    type: "csv"
   - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/sommersemester/wochenplaene/
     faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins

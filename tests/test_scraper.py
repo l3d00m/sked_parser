@@ -82,6 +82,9 @@ def test_optimize_label_strip_semester():
     # Even shorter semester shorthand used
     in_str = "Wirtschaftsinformatik 5 Sem"
     assert optimize_label(in_str, False) == "Wirtschaftsinformatik"
+    # Weird duplicated semester string with CSV at end
+    in_str = "WI_4_4. Sem..csv"
+    assert optimize_label(in_str, False) == "WI"
 
 
 def test_optimize_label_shorthand_strip():

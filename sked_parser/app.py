@@ -53,7 +53,7 @@ def main(config, secrets, out_file="timetables.json"):
 
     tables = list(filter(is_valid_item, tables))
     # Sort first by faculty, then by master/bachelor, then by semester and last by alphabetical label
-    tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester']), x['label']))
+    tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester']), x['label'], x['id']))
     raise_for_duplicated_ids(tables)
     write_timetable_json(tables, out_file)
 
