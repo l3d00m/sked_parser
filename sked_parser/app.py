@@ -35,10 +35,10 @@ def is_valid_item(table):
     return True
 
 
-def main(config, secrets, out_file="timetables.json"):
+def main(config, secrets, out_files):
     tables = []
     for plan in config["plans"]:
-        tuples = scraper.get_links(plan['url'], secrets['sked'], plan['faculty'])
+        tuples = scraper.get_links(plan['url'], secrets, plan['faculty'])
         if len(tuples) == 0:
             log.warning(f"URL {plan['url']} hat keine Pläne.")
         for label, sked_path in tuples:
@@ -55,7 +55,8 @@ def main(config, secrets, out_file="timetables.json"):
     # Sort first by faculty, then by master/bachelor, then by semester and last by alphabetical label
     tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester']), x['label'], x['id']))
     raise_for_duplicated_ids(tables)
-    write_timetable_json(tables, out_file)
+    for out_file in out_files:
+        write_timetable_json(tables, out_file)
 
-    log.info(f"Parsed {len(tables)} timetables and wrote them to {out_file}.")
+    log.info(f"Parsed {len(tables)} timetables sucessfully into JSON.")
     return 0

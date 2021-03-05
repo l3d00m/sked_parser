@@ -1,6 +1,7 @@
 """Console script for sked_parser."""
 import argparse
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -31,14 +32,25 @@ def main():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-c", "--config-file", type=str, default="config.yaml", help="Path to the main yaml configuration file")
     parser.add_argument("-s", "--secrets-file", type=str, default="secrets.yaml", help="Path to the yaml secrets file containing ostfalia user and password")
-    parser.add_argument("-o", "--out-file", type=str, default="timetables.json", help="Where to store the resulting json file")
+    parser.add_argument("-o", "--out-file", type=str, default=["timetables.json"], action='append',
+                        help="Where to store the resulting json file. Can be specified multiple times.")
     args = parser.parse_args()
     # Contains the urls and other configuration
     config = load_yaml_conf(Path(args.config_file).resolve())
-    # Contains only the secrets to access ostfalia sked URLs
-    secrets = load_yaml_conf(Path(args.secrets_file).resolve())
 
-    app.main(config, secrets, Path(args.out_file).resolve())
+    # Load username and password to access ostfalia sked URLs either from yaml if exists or from environment
+    secrets = {}
+    secrets['user'] = os.environ.get('OSTFALIA_USER')
+    secrets['pass'] = os.environ.get('OSTFALIA_PASS')
+    secrets_path = Path(args.secrets_file).resolve()
+    if secrets_path.exists():
+        secrets = load_yaml_conf(secrets_path)
+        secrets['user'] = secrets['sked']['user']
+        secrets['pass'] = secrets['sked']['pass']
+    if secrets['user'] is None or secrets['pass'] is None:
+        raise Exception("Please specify your Ostalia credentials either via a secrets.yaml file or via environment variables.")
+    out_files = [Path(x).resolve() for x in args.out_file]
+    app.main(config, secrets, out_files)
 
 
 if __name__ == "__main__":
