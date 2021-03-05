@@ -5,6 +5,7 @@ import os
 import sys
 from pathlib import Path
 
+import pkg_resources
 import yaml
 
 from sked_parser import app
@@ -19,7 +20,7 @@ def load_yaml_conf(yaml_file):
 
 
 def main():
-    # Add helpfullogging handler
+    # Add helpful logging handler
     log.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
@@ -30,13 +31,19 @@ def main():
     # Add argparse for help text and future enhancements
     parser = argparse.ArgumentParser(description='Convert sked timetables from overview URLs into a readable format for spluseins.de',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-c", "--config-file", type=str, default="config.yaml", help="Path to the main yaml configuration file")
+    parser.add_argument("-c", "--config-file", type=str, help="Path to the main yaml configuration file")
     parser.add_argument("-s", "--secrets-file", type=str, default="secrets.yaml", help="Path to the yaml secrets file containing ostfalia user and password")
     parser.add_argument("-o", "--out-file", type=str, action='append',
                         help="Where to store the resulting json file. Can be specified multiple times.")
     args = parser.parse_args()
-    # Contains the urls and other configuration
-    config = load_yaml_conf(Path(args.config_file).resolve())
+
+    # Config contains the urls and other configuration.
+    if args.config_file is None:
+        # If file is not specified, use the package-provided config file
+        config = yaml.safe_load(pkg_resources.resource_string(__name__, "config.yaml"))
+    else:
+        # Load from the specified file
+        config = load_yaml_conf(Path(args.config_file).resolve())
 
     # Load username and password to access ostfalia sked URLs either from yaml if exists or from environment
     secrets = {}
@@ -49,6 +56,8 @@ def main():
         secrets['pass'] = secrets['sked']['pass']
     if secrets['user'] is None or secrets['pass'] is None:
         raise Exception("Please specify your Ostalia credentials either via a secrets.yaml file or via environment variables.")
+
+    #
     if args.out_file is None:
         out_files = [Path("timetables.json").resolve()]
     else:

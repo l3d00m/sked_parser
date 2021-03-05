@@ -32,6 +32,9 @@ setup(
         ],
     },
     install_requires=requirements,
+    package_data={
+        "sked_parser": ["config.yaml"],
+    },
     license="MIT license",
     long_description=readme,
     include_package_data=True,
