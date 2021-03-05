@@ -3,7 +3,6 @@ import re
 from urllib.parse import unquote, urljoin
 
 import requests
-import requests_cache
 from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
 
@@ -11,7 +10,8 @@ log = logging.getLogger("sked_parser")
 
 
 # Install request cache with 10 minute expiration time to avoid spamming requests
-requests_cache.install_cache(expire_after=600)
+# import requests_cache
+# requests_cache.install_cache(expire_after=600)
 
 
 def get_links(overview_url, auth, faculty=""):

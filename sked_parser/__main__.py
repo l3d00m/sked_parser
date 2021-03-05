@@ -32,7 +32,7 @@ def main():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-c", "--config-file", type=str, default="config.yaml", help="Path to the main yaml configuration file")
     parser.add_argument("-s", "--secrets-file", type=str, default="secrets.yaml", help="Path to the yaml secrets file containing ostfalia user and password")
-    parser.add_argument("-o", "--out-file", type=str, default=["timetables.json"], action='append',
+    parser.add_argument("-o", "--out-file", type=str, action='append',
                         help="Where to store the resulting json file. Can be specified multiple times.")
     args = parser.parse_args()
     # Contains the urls and other configuration
@@ -49,7 +49,10 @@ def main():
         secrets['pass'] = secrets['sked']['pass']
     if secrets['user'] is None or secrets['pass'] is None:
         raise Exception("Please specify your Ostalia credentials either via a secrets.yaml file or via environment variables.")
-    out_files = [Path(x).resolve() for x in args.out_file]
+    if args.out_file is None:
+        out_files = [Path("timetables.json").resolve()]
+    else:
+        out_files = [Path(x).resolve() for x in args.out_file]
     app.main(config, secrets, out_files)
 
 
