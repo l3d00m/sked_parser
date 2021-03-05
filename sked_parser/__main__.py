@@ -31,7 +31,7 @@ def main():
     # Add argparse for help text and future enhancements
     parser = argparse.ArgumentParser(description='Convert sked timetables from overview URLs into a readable format for spluseins.de',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-c", "--config-file", type=str, help="Path to the main yaml configuration file")
+    parser.add_argument("-c", "--config-file", type=str, help="Path to the main yaml configuration file. Defaults to the provided `sked_parser/config.yaml`")
     parser.add_argument("-s", "--secrets-file", type=str, default="secrets.yaml", help="Path to the yaml secrets file containing ostfalia user and password")
     parser.add_argument("-o", "--out-file", type=str, action='append',
                         help="Where to store the resulting json file. Can be specified multiple times.")

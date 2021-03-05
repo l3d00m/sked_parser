@@ -7,10 +7,10 @@ Parses Ostfalia University [`sked`](https://www.sked.de/) timetables into a JSON
 # Installation & Usage
 
 1. Install python>=3.9, git and pip
-2. Clone this repository: `git clone git@github.com:l3d00m/sked_parser.git` and `cd sked_parser`.
-3. Install the tool with pip from the cloned (i.e. current) folder: `python -m pip install .` or `python -m pip install -e .` when developing.
+2. Clone this repository: `git clone https://github.com/SplusEins/sked_parser.git` and `cd sked_parser`.
+3. Install the tool with pip from the cloned folder: `python -m pip install -e .`.
 4. Copy `secrets.example.yaml` into `secrets.yaml` and fill it with your Ostfalia credentials.
-5. Modify `config.yaml` with the current timetable URLs. See below for syntax reference.
+5. Modify `sked_parser/config.yaml` with the current timetable URLs. See below for syntax reference.
 6. Run the tool by executing `sked-parser`. It'll then create the desired `timetables.json`.
 
 ## `config.yaml` syntax reference
@@ -36,9 +36,11 @@ Refer to the [SplusEins Documentation](https://spluseins-i.ostfalia.de/docs/seme
 
 usage: `sked-parser [-h] [-c CONFIG_FILE] [-s SECRETS_FILE] [-o OUT_FILE]`
 
--   `-c CONFIG_FILE`: Path to the main YAML configuration file (default: `config.yaml` in current directory)
--   `-s SECRETS_FILe` Path to the YAML secrets file containing Ostfalia user and password (default: `secrets.yaml` in current directory)
--   `-o OUT_FILE` Where to store the resulting JSON file (default: `timetables.json` in current directory)
+-   `-c CONFIG_FILE`: Path to the main yaml configuration file. Defaults to the provided `sked_parser/config.yaml`.
+-   `-s SECRETS_FILe` Path to the YAML secrets file containing Ostfalia user and password (Default: `secrets.yaml` in current directory)
+-   `-o OUT_FILE` Where to store the resulting json file. Can be specified multiple times (Default: `timetables.json` in current directory)
+
+It's also possible to specify the Ostfalia credentials via `OSTFALIA_USER` and `OSTFALIA_PASS` environment variables.
 
 # How it works
 
