@@ -13,6 +13,11 @@ log = logging.getLogger("sked_parser")
 # import requests_cache
 # requests_cache.install_cache(expire_after=600)
 
+# Create a requests session with our own user agent, so it's clear who manages the automated requests.
+session = requests.Session()
+session.headers.update({'User-Agent': 'Sked parser for spluseins.de',
+                        'From': 'team@spluseins.de'})
+
 
 def get_links(overview_url, auth, faculty=""):
     """Scrape all valid timetable URLS from `overview_url`.
@@ -25,7 +30,7 @@ def get_links(overview_url, auth, faculty=""):
     Returns:
         Set[Tuple]: List of tuples with (url description, sked path)
     """
-    resp = requests.get(overview_url, auth=HTTPBasicAuth(auth['user'], auth['pass']))
+    resp = session.get(overview_url, auth=HTTPBasicAuth(auth['user'], auth['pass']))
     soup = BeautifulSoup(resp.content, 'lxml')
     tables = set()
     valid_url_regex = re.compile(r'^\w/.+\.(html|csv)$', re.IGNORECASE)
