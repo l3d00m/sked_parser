@@ -1,5 +1,6 @@
 import json
 import logging
+from time import sleep
 
 from sked_parser import scraper
 
@@ -50,7 +51,7 @@ def main(config, secrets, out_files):
             plan_type = plan.get('type', 'graphical')
             tables.append(dict(skedPath=sked_path, label=label, faculty=plan['faculty'],
                                type=plan_type, id=sked_id, semester=semester, degree=degree))
-
+        sleep(1)
     tables = list(filter(is_valid_item, tables))
     # Sort first by faculty, then by master/bachelor, then by semester and last by alphabetical label
     tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester']), x['label'], x['id']))
