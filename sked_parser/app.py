@@ -30,10 +30,13 @@ def is_valid_item(table):
     if "block" in table['skedPath'].lower():
         # Blockveranstaltungen (Fakultät E) erstmal raus
         return False
-    if "SS2021" in table['skedPath'].lower():
+    if "ss2021" in table['skedPath'].lower():
         # irgendwas altes, raus damit
         return False
     if "ss 21" in table['label'].lower():
+        # irgendwas altes, raus damit
+        return False
+    if "sose" in table['label'].lower():
         # irgendwas altes, raus damit
         return False
     return True
@@ -52,6 +55,8 @@ def main(config, secrets, out_files):
             sked_id = scraper.create_id(sked_path, faculty_short, config['current_sem'], semester)
             label = scraper.optimize_label(label, plan.get('shorthand_syntax', False))
             plan_type = plan.get('type', 'graphical')
+            if "alt" in sked_path:
+                label += " alt"
             tables.append(dict(skedPath=sked_path, label=label, faculty=plan['faculty'],
                                type=plan_type, id=sked_id, semester=semester, degree=degree))
         sleep(1)
