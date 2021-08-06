@@ -39,6 +39,9 @@ def is_valid_item(table):
     if "sose" in table['label'].lower():
         # irgendwas altes, raus damit
         return False
+    if table['faculty'] == 'Soziale Arbeit' and "fernstudiengang" in table['label'].lower():
+        # schlechte formatierung, wird ignoriert
+        return False
     return True
 
 

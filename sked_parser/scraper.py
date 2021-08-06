@@ -157,7 +157,7 @@ def optimize_label(desc, uses_shorthand_syntax):
 def guess_degree(desc, link):
     """Return an estimation whether it's a master or bachelor degree"""
     link = link.lower()
-    if "master" in desc.lower() or "m.sc" in desc.lower() or "imes" in desc.lower() or "IST" in desc:
+    if "master" in desc.lower() or "m.sc" in desc.lower() or "imes" in desc.lower() or "IST" in desc or "IVG" in desc:
         return "Master"
     if "-m-" in link or "_m_" in link:
         if "studienprofil m" in desc.lower():
