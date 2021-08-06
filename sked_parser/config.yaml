@@ -1,6 +1,6 @@
 current_sem: "ws21"
 plans:
-  # Neue komische Website
+  # Neue komische Website mit anderer URL für die einzelnen Pläne => geht nicht
   # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
   #   faculty: Bau-Wasser-Boden
   - url: https://stundenplan.ostfalia.de/e/
@@ -13,11 +13,11 @@ plans:
     shorthand_syntax: True
   - url: https://stundenplan.ostfalia.de/h/wp/index.html
     faculty: Handel und Soziale Arbeit
-  #- url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
-  #  faculty: Informatik
-  #  type: "csv"
-  #- url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/sommersemester/wochenplaene/
-  #  faculty: Verkehr-Sport-Tourismus-Medien
+  - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
+    faculty: Informatik
+    type: "csv"
+  - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
+    faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html
   #  faculty: Maschinenbau
@@ -25,24 +25,24 @@ plans:
   #  faculty: Recht
   - url: https://stundenplan.ostfalia.de/s/wp/index.html
     faculty: Soziale Arbeit
-  # - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
-  #   faculty: Versorgungstechnik
-  #   shorthand_syntax: True
-  # - url: https://stundenplan.ostfalia.de/v/stundenplan/egt/
-  #   faculty: Versorgungstechnik
-  #   shorthand_syntax: True
-  # - url: https://stundenplan.ostfalia.de/v/stundenplan/wing/
-  #   faculty: Versorgungstechnik
-  #   shorthand_syntax: True
-  # - url: https://stundenplan.ostfalia.de/v/stundenplan/dt/
-  #   faculty: Versorgungstechnik
-  #   shorthand_syntax: True
-  # - url: https://stundenplan.ostfalia.de/v/stundenplan/ge/
-  #   faculty: Versorgungstechnik
-  #   shorthand_syntax: True
-  # - url: https://stundenplan.ostfalia.de/v/stundenplan/sce/
-  #   faculty: Versorgungstechnik
-  #   shorthand_syntax: True
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
+    faculty: Versorgungstechnik
+    shorthand_syntax: True
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/egt/
+    faculty: Versorgungstechnik
+    shorthand_syntax: True
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/wing/
+    faculty: Versorgungstechnik
+    shorthand_syntax: True
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/dt/
+    faculty: Versorgungstechnik
+    shorthand_syntax: True
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/ge/
+    faculty: Versorgungstechnik
+    shorthand_syntax: True
+  - url: https://stundenplan.ostfalia.de/v/stundenplan/sce/
+    faculty: Versorgungstechnik
+    shorthand_syntax: True
   # Haben exakt einen einzigen Stundenplan:
   #- url: https://stundenplan.ostfalia.de/w/wp/index.html
   #  faculty: Wirtschaft
