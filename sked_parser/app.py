@@ -30,7 +30,10 @@ def is_valid_item(table):
     if "block" in table['skedPath'].lower():
         # Blockveranstaltungen (Fakultät E) erstmal raus
         return False
-    if "ws 20" in table['label'].lower():
+    if "SS2021" in table['skedPath'].lower():
+        # irgendwas altes, raus damit
+        return False
+    if "ss 21" in table['label'].lower():
         # irgendwas altes, raus damit
         return False
     return True

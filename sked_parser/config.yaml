@@ -1,4 +1,4 @@
-current_sem: "ss21"
+current_sem: "ws21"
 plans:
   # Neue komische Website
   # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
@@ -13,16 +13,16 @@ plans:
     shorthand_syntax: True
   - url: https://stundenplan.ostfalia.de/h/wp/index.html
     faculty: Handel und Soziale Arbeit
-  - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
-    faculty: Informatik
-    type: "csv"
-  - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/sommersemester/wochenplaene/
-    faculty: Verkehr-Sport-Tourismus-Medien
+  #- url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
+  #  faculty: Informatik
+  #  type: "csv"
+  #- url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/sommersemester/wochenplaene/
+  #  faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html
   #  faculty: Maschinenbau
-  - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
-    faculty: Recht
+  #- url: https://stundenplan.ostfalia.de/r/studentenset/index.html
+  #  faculty: Recht
   - url: https://stundenplan.ostfalia.de/s/wp/index.html
     faculty: Soziale Arbeit
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
