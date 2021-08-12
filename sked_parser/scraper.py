@@ -133,7 +133,8 @@ def optimize_label(desc, uses_shorthand_syntax):
     desc = desc.replace('I-', '')
     desc = desc.replace('B.Sc.', '')
     desc = desc.replace('I-M.Sc.', '')
-    desc = desc.replace('Soziale Arbeit -', '')
+    # desc = desc.replace('Soziale Arbeit -', '')
+    desc = desc.replace('- WiSe 21/22', '')
     desc = desc.replace('.csv', '')
     desc = re.sub(r'\s+', ' ', desc)  # replace all (even duplicated) whitespaces by single space
     if uses_shorthand_syntax:

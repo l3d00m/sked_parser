@@ -1,8 +1,7 @@
 current_sem: "ws21"
 plans:
-  # Neue komische Website mit anderer URL für die einzelnen Pläne => geht nicht
-  # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
-  #   faculty: Bau-Wasser-Boden
+  - url: https://stundenplan.ostfalia.de/b/wp/index.html
+    faculty: Bau-Wasser-Boden
   - url: https://stundenplan.ostfalia.de/e/
     faculty: Elektrotechnik
   # Haben nur PDFs, die Pläne sind zwar online aber von 2019/20!
@@ -21,8 +20,8 @@ plans:
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html
   #  faculty: Maschinenbau
-  #- url: https://stundenplan.ostfalia.de/r/studentenset/index.html
-  #  faculty: Recht
+  # - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
+  #   faculty: Recht
   - url: https://stundenplan.ostfalia.de/s/wp/index.html
     faculty: Soziale Arbeit
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/
@@ -44,5 +43,5 @@ plans:
     faculty: Versorgungstechnik
     shorthand_syntax: True
   # Haben exakt einen einzigen Stundenplan:
-  #- url: https://stundenplan.ostfalia.de/w/wp/index.html
-  #  faculty: Wirtschaft
+  # - url: https://stundenplan.ostfalia.de/w/wp/index.html
+  #   faculty: Wirtschaft
