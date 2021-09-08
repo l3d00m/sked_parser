@@ -39,9 +39,10 @@ def get_links(overview_url, auth, faculty=""):
         part_url = absolute_url.removeprefix("https://stundenplan.ostfalia.de/")
         if valid_url_regex.match(part_url):
             desc = this_url.text.strip()
-            if "Tourismus" in faculty:
+            if "Recht" in faculty:
                 # Prepend the content of the previous paragraph to the description because it contains the real name of the plan
-                desc = this_url.find_previous("p").text.strip() + " " + desc
+                if (this_url.parent.parent.name == 'ol'):
+                    desc = this_url.parent.parent.previous + " " + desc
             tables.add((desc, part_url))
     return tables
 
@@ -133,7 +134,8 @@ def optimize_label(desc, uses_shorthand_syntax):
     desc = desc.replace('I-', '')
     desc = desc.replace('B.Sc.', '')
     desc = desc.replace('I-M.Sc.', '')
-    # desc = desc.replace('Soziale Arbeit -', '')
+    desc = desc.replace('Bachelor', '')
+    desc = desc.replace('Master', '')
     desc = desc.replace('- WiSe 21/22', '')
     desc = desc.replace('.csv', '')
     desc = re.sub(r'\s+', ' ', desc)  # replace all (even duplicated) whitespaces by single space
@@ -148,6 +150,7 @@ def optimize_label(desc, uses_shorthand_syntax):
             desc = f"{shorthand} {additional_stuff}"
     # Remove any semester related information
     desc = re.sub(r'(\d\. ?-)?-? ?\d\.?\W+Sem(?:ester|\.)?', '', desc)
+    desc = desc.replace('Semester', '')
     # Strip any remaining single digits
     desc = re.sub(r'[_-]\d(?=_|$)', '', desc)
     # Remove duplicated spaces

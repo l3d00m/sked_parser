@@ -15,13 +15,13 @@ plans:
   - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
     faculty: Informatik
     type: "csv"
-  - url: https://www.ostfalia.de/cms/de/k/studium/stundenplaene/wintersemester/wochenplaene/
+  - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ws/
     faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html
   #  faculty: Maschinenbau
-  # - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
-  #   faculty: Recht
+  - url: https://stundenplan.ostfalia.de/r/studentenset/index.html
+    faculty: Recht
   - url: https://stundenplan.ostfalia.de/s/wp/index.html
     faculty: Soziale Arbeit
   - url: https://stundenplan.ostfalia.de/v/stundenplan/bee/

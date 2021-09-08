@@ -24,7 +24,10 @@ def raise_for_duplicated_ids(dict_to_check):
 
 def is_valid_item(table):
     """Returns whether a table is allowed in spluseins. Used for filtering some unwanted items (Klausurenpläne)"""
-    if "klausur" in table['label'].lower():
+    if "klausur" in table['label'].lower() or "prüfung" in table['label'].lower():
+        # Klausurenpläne entfernen
+        return False
+    if "pruefung" in table['skedPath'].lower():
         # Klausurenpläne entfernen
         return False
     if "block" in table['skedPath'].lower():
@@ -41,6 +44,8 @@ def is_valid_item(table):
         return False
     if table['faculty'] == 'Soziale Arbeit' and "fernstudiengang" in table['label'].lower():
         # schlechte formatierung, wird ignoriert
+        return False
+    if table['skedPath'].endswith('index.html'):
         return False
     return True
 
