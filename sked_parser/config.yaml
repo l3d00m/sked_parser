@@ -1,4 +1,13 @@
-current_sem: "ws21"
+current_sem: "ss22"
+# timetables with the following strings in the URL or description will be filtered out (use lowercase only)
+timetable_blacklist:
+  - "ws2021"
+  - "ws 21"
+  - "wise"
+  - "/ws/"
+  - "pruefung"
+  - "klausur"
+  - "prüfung"
 plans:
   - url: https://stundenplan.ostfalia.de/b/wp/index.html
     faculty: Bau-Wasser-Boden
@@ -15,7 +24,7 @@ plans:
   - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
     faculty: Informatik
     type: "csv"
-  - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ws/
+  - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ss/
     faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html

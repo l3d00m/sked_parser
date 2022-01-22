@@ -22,31 +22,23 @@ def raise_for_duplicated_ids(dict_to_check):
         log.critical(f"Zwei oder mehr Pläne haben die gleiche ID bekommen: {duplicated_ids}")
 
 
-def is_valid_item(table):
+def is_valid_item(table, blacklist):
     """Returns whether a table is allowed in spluseins. Used for filtering some unwanted items (Klausurenpläne)"""
-    if "klausur" in table['label'].lower() or "prüfung" in table['label'].lower():
-        # Klausurenpläne entfernen
-        return False
-    if "pruefung" in table['skedPath'].lower():
-        # Klausurenpläne entfernen
-        return False
-    if "block" in table['skedPath'].lower():
+    if table['faculty'] == 'Elektrotechnik' and "block" in table['skedPath'].lower():
         # Blockveranstaltungen (Fakultät E) erstmal raus
-        return False
-    if "ss2021" in table['skedPath'].lower():
-        # irgendwas altes, raus damit
-        return False
-    if "ss 21" in table['label'].lower():
-        # irgendwas altes, raus damit
-        return False
-    if "sose" in table['label'].lower():
-        # irgendwas altes, raus damit
         return False
     if table['faculty'] == 'Soziale Arbeit' and "fernstudiengang" in table['label'].lower():
         # schlechte formatierung, wird ignoriert
         return False
     if table['skedPath'].endswith('index.html'):
         return False
+    for forbidden in blacklist:
+        if forbidden.lower() in table['skedPath'].lower():
+            log.info("Skipping timetable with forbidden path: " + table['skedPath'])
+            return False
+        if forbidden.lower() in table['label'].lower():
+            log.info("Skipping timetable with forbidden label: " + table['label'])
+            return False
     return True
 
 
@@ -57,6 +49,7 @@ def main(config, secrets, out_files):
         if len(tuples) == 0:
             log.warning(f"URL {plan['url']} hat keine Pläne.")
         for label, sked_path in tuples:
+            label = label.replace("\n", " ").replace("\r", " ")  # for logging purposes
             faculty_short = scraper.get_faculty_shortcode(sked_path)
             degree = scraper.guess_degree(label, sked_path)
             semester = scraper.extract_semester(label, sked_path) or "Sonstige"
@@ -68,7 +61,7 @@ def main(config, secrets, out_files):
             tables.append(dict(skedPath=sked_path, label=label, faculty=plan['faculty'],
                                type=plan_type, id=sked_id, semester=semester, degree=degree))
         sleep(1)
-    tables = list(filter(is_valid_item, tables))
+    tables = [table for table in tables if is_valid_item(table, set(config["timetable_blacklist"]))]
     # Sort first by faculty, then by master/bachelor, then by semester and last by alphabetical label
     tables = sorted(tables, key=lambda x: (x['faculty'], x['degree'], str(x['semester']), x['label'], x['id']))
     raise_for_duplicated_ids(tables)
