@@ -30,8 +30,6 @@ def is_valid_item(table, blacklist):
     if table['faculty'] == 'Soziale Arbeit' and "fernstudiengang" in table['label'].lower():
         # schlechte formatierung, wird ignoriert
         return False
-    if table['skedPath'].endswith('index.html'):
-        return False
     for forbidden in blacklist:
         if forbidden.lower() in table['skedPath'].lower():
             log.info("Skipping timetable with forbidden path: " + table['skedPath'])

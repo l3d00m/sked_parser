@@ -8,6 +8,7 @@ timetable_blacklist:
   - "pruefung"
   - "klausur"
   - "prüfung"
+  - "sem.html" # FIXME remove me next semester tmp filter for soziale arbeit
 plans:
   - url: https://stundenplan.ostfalia.de/b/wp/index.html
     faculty: Bau-Wasser-Boden

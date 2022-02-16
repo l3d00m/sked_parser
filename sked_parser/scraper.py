@@ -37,6 +37,8 @@ def get_links(overview_url, auth, faculty=""):
     for this_url in soup.find_all('a', href=True):
         absolute_url = urljoin(overview_url, this_url['href'])
         part_url = absolute_url.removeprefix("https://stundenplan.ostfalia.de/")
+        if part_url.endswith('index.html'):
+            continue
         if valid_url_regex.match(part_url):
             desc = this_url.text.strip()
             if "Recht" in faculty:
@@ -106,6 +108,10 @@ def extract_semester(desc, url):
     for keyword in ["wahlpflicht", "wpf"]:
         if keyword in desc.lower() or keyword in url.lower():
             return "WPF"
+    # should always return none
+    for keyword in ["gremien", "termine"]:
+        if keyword in desc.lower() or keyword in url.lower():
+            return None
     # Try to extract the semester by finding a number followed by non word characters and something starting with Sem
     sem_regex = re.compile(r'(?:^|\D)(\d)\W+Sem', re.IGNORECASE)
     m_desc = sem_regex.search(desc)
