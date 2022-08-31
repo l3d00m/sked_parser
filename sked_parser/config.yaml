@@ -9,8 +9,9 @@ timetable_blacklist:
   - "klausur"
   - "prüfung"
 plans:
-  - url: https://stundenplan.ostfalia.de/b/wp/index.html
-    faculty: Bau-Wasser-Boden
+  # Formatierung zu kompliziert
+  # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
+  #   faculty: Bau-Wasser-Boden
   - url: https://stundenplan.ostfalia.de/e/
     faculty: Elektrotechnik
   # Haben nur PDFs, die Pläne sind zwar online aber von 2019/20!
