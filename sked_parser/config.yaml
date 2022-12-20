@@ -8,6 +8,7 @@ timetable_blacklist:
   - "pruefung"
   - "klausur"
   - "prüfung"
+  - "..csv" # FIXME remove in SS23 filter for infomraitk after SKED update
 plans:
   # Formatierung zu kompliziert
   # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
