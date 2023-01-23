@@ -1,14 +1,14 @@
-current_sem: "ws23"
+current_sem: "ss23"
 # timetables with the following strings in the URL or description will be filtered out (use lowercase only)
 timetable_blacklist:
-  - "ss2022"
-  - "ss 22"
-  - "sose"
-  - "/ss/"
+  - "ws2022"
+  - "ws 22"
+  - "wise"
+  - "/ws/"
   - "pruefung"
   - "klausur"
   - "prüfung"
-  - "..csv" # FIXME remove in SS23 filter for infomraitk after SKED update
+
 plans:
   # Formatierung zu kompliziert
   # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
@@ -26,7 +26,7 @@ plans:
   - url: https://stundenplan.ostfalia.de/i/Alle%20Daten%20im%20CSV-Format/Semester/
     faculty: Informatik
     type: "csv"
-  - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ws/
+  - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ss/
     faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html
