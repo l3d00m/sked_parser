@@ -10,12 +10,12 @@ timetable_blacklist:
   - "prüfung"
 
 plans:
-  # Formatierung zu kompliziert
+  # Pläne sind woanders abgelegt (nicht unter stundenplan.ostfalia.de), geht nicht
   # - url: https://www.ostfalia.de/cms/de/b/studium/stundenplaene/
   #   faculty: Bau-Wasser-Boden
   - url: https://stundenplan.ostfalia.de/e/
     faculty: Elektrotechnik
-  # Haben nur PDFs, die Pläne sind zwar online aber von 2019/20!
+  # Pläne sind zwar online, aber Formatierung mit der Uhrzeit mittendrin ist zu kompliziert
   # - url: https://stundenplan.ostfalia.de/f/wp/index.html
   #   faculty: Fahrzeugtechnik
   - url: https://stundenplan.ostfalia.de/g/wp/index.html
