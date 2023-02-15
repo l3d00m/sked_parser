@@ -62,6 +62,18 @@ def test_extract_semester_url_fallback():
     assert extract_semester("Nothing in here", url_str) == 1
 
 
+def test_extract_semester_url_digit_at_end():
+    """Test that URL parsing with digit at end works"""
+    url_str = "r/studentenset/23-03-r-b-rfs-2.html"
+    assert extract_semester("Nothing in here", url_str) == 2
+
+
+def test_extract_semester_url_no_digit_in_middle():
+    """Test that URL parsing with digit at end works"""
+    url_str = "r/studentenset/23-2-r-b-rfs.html"
+    assert extract_semester("Nothing in here", url_str) is None
+
+
 def test_optimize_label_strip_semester():
     """Verify the semester is correctly stripped from the label"""
     # Semester at end
@@ -124,4 +136,5 @@ def test_extract_id():
     assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_b_eit_1_ws"
     # Complicated semester specification
     in_str = "PSA_M_1. Semester_Schwerpunkt"
-    assert create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_psa_m_schwerpunkt_1_ws"
+    assert create_id(sked_path(in_str), faculty_short, current_sem_str,
+                     extracted_semester) == "e_psa_m_schwerpunkt_1_ws"

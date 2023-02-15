@@ -113,7 +113,7 @@ def extract_semester(desc, url):
         if keyword in desc.lower() or keyword in url.lower():
             return None
     # Try to extract the semester by finding a number followed by non word characters and something starting with Sem
-    sem_regex = re.compile(r'(?:^|\D)(\d)\W+Sem', re.IGNORECASE)
+    sem_regex = re.compile(r'(?:^|\D)(\d)\W+(Sem|html$)', re.IGNORECASE)
     m_desc = sem_regex.search(desc)
     m_url = sem_regex.search(url)
     if m_desc:
