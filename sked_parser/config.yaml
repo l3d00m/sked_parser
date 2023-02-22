@@ -8,6 +8,7 @@ timetable_blacklist:
   - "pruefung"
   - "klausur"
   - "prüfung"
+  - "..csv" # weird informatik duplicated tables with double dot
 
 plans:
   # Pläne sind woanders abgelegt (nicht unter stundenplan.ostfalia.de), geht nicht
