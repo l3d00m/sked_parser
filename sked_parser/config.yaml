@@ -1,10 +1,10 @@
-current_sem: "ss23"
+current_sem: "ws2324"
 # timetables with the following strings in the URL or description will be filtered out (use lowercase only)
 timetable_blacklist:
-  - "ws2022"
-  - "ws 22"
-  - "wise"
-  - "/ws/"
+  - "ss2023"
+  - "ss 23"
+  - "sose"
+  - "/ss/"
   - "pruefung"
   - "klausur"
   - "prüfung"
