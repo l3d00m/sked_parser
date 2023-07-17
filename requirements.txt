@@ -1,5 +1,5 @@
-bs4
-lxml
-pyyaml
-jsonpickle
-requests_cache
+beautifulsoup4==4.12.2
+lxml==4.9.3
+pyyaml==6.0
+jsonpickle==3.0.1
+requests==2.31.0
