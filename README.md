@@ -10,7 +10,7 @@ Parses Ostfalia University [`sked`](https://www.sked.de/) timetables into a JSON
 2. Clone this repository: `git clone https://github.com/SplusEins/sked_parser.git` and `cd sked_parser`.
 3. Install the tool with pip from the cloned folder: `python -m pip install -e .`.
 4. Copy `secrets.example.yaml` into `secrets.yaml` and fill it with your Ostfalia credentials.
-5. Modify `sked_parser/config.yaml` with the current timetable URLs. See below for syntax reference.
+5. Add `sked_parser/config.yaml` with the current timetable URLs. See below for syntax reference.
 6. Run the tool by executing `sked-parser`. It'll then create the desired `timetables.json`.
 
 ## `config.yaml` syntax reference
@@ -28,6 +28,8 @@ plans:
       faculty: Versorgungstechnik
       shorthand_syntax: True # Optional, defaults to false. See section shorthand syntax further below.
 current_sem: "ss21" # Current semester string that will be appended to the IDs (to have unique IDs for each semester)
+timetable_blacklist:
+    - "blacklisted timetable name or URL"
 ```
 
 Refer to the [SplusEins Documentation](https://spluseins-i.ostfalia.de/docs/semesterbeginn.html#aktualisierung-der-plane) for details on the resulting JSON format.
