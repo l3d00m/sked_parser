@@ -1,10 +1,12 @@
 current_sem: "ws2324"
 # timetables with the following strings in the URL or description will be filtered out (use lowercase only)
 timetable_blacklist:
+  # TODO im naechsten Semester austauschen
   - "ss2023"
   - "ss 23"
   - "sose"
   - "/ss/"
+
   - "pruefung"
   - "klausur"
   - "prüfung"
@@ -28,6 +30,8 @@ plans:
     faculty: Informatik
     type: "csv"
   - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ss/
+    faculty: Verkehr-Sport-Tourismus-Medien
+  - url: https://stundenplan.ostfalia.de/k/prod/vorlesungsplaene/wp/ws/
     faculty: Verkehr-Sport-Tourismus-Medien
   # Die Timetables haben keine Uhrzeit in den einzelnen Elementen => zu hart für SplusEins
   # - url: https://stundenplan.ostfalia.de/m/sem/index.html
