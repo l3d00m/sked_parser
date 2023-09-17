@@ -1,4 +1,4 @@
-from sked_parser.scraper import create_id, extract_semester, optimize_label
+from sked_parser.scraper import create_id, extract_semester, optimize_label, guess_degree
 
 
 def test_extract_semester_normal():
@@ -138,3 +138,8 @@ def test_extract_id():
     in_str = "PSA_M_1. Semester_Schwerpunkt"
     assert create_id(sked_path(in_str), faculty_short, current_sem_str,
                      extracted_semester) == "e_psa_m_schwerpunkt_1_ws"
+
+
+def test_is_master():
+    def sked_path(part_str): return f"e/semester/{part_str}.html"
+    assert guess_degree("", sked_path("b_stgrp_ma_glob_1")) == "Master"

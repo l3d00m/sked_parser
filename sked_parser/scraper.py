@@ -169,7 +169,7 @@ def guess_degree(desc, link):
     link = link.lower()
     if "master" in desc.lower() or "m.sc" in desc.lower() or "imes" in desc.lower() or "IST" in desc or "IVG" in desc:
         return "Master"
-    if "-m-" in link or "_m_" in link:
+    if "-m-" in link or "_m_" in link or "_ma_" in link or "-ma-" in link:
         if "studienprofil m" in desc.lower():
             return "Bachelor"
         log.info(f"Master vermutet für '{desc}'. Bitte manuell überprüfen, dass es kein Bachelor ist. Link ist {link}.")

@@ -8,7 +8,15 @@
             "name": "Python: Module",
             "type": "python",
             "request": "launch",
-            "module": "sked_parser"
-        },
+            "module": "sked_parser",
+            "args": [
+                "-c",
+                "../spluseins/timetable-config.yaml",
+                "-o",
+                "../spluseins/web/assets/timetables.json",
+                "-o",
+                "../spluseins/server/assets/timetables.json"
+            ]
+        }
     ]
 }
