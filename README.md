@@ -1,6 +1,6 @@
 # Sked Parser
 
-[![image](https://img.shields.io/travis/l3d00m/sked_parser.svg)](https://travis-ci.com/l3d00m/sked_parser)
+[![Python package](https://github.com/SplusEins/sked_parser/actions/workflows/python-package.yml/badge.svg?event=push)](https://github.com/SplusEins/sked_parser/actions/workflows/python-package.yml)
 
 Parses Ostfalia University [`sked`](https://www.sked.de/) timetables into a JSON format than can be used inside [SplusEins](https://github.com/SplusEins/SplusEins).
 
