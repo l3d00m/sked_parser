@@ -1,6 +1,6 @@
 beautifulsoup4==4.12.3
 lxml==4.9.4
 pyyaml==6.0.1
-jsonpickle==3.0.2
+jsonpickle==3.0.3
 requests==2.31.0
 setuptools==68.2.2
