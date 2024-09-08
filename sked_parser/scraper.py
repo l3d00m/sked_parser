@@ -54,7 +54,7 @@ def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
     # Unqoute the URL first
     sked_path = unquote(sked_path)
     # Get a basic id from the url page, which is the last part excluding the .extension
-    id_re = re.compile(r'\w/.+/(.+?)\.+(html|csv)', re.IGNORECASE)
+    id_re = re.compile(r'\w/(?:.*/)?(.+?)\.+(html|csv)', re.IGNORECASE)
     m = id_re.search(sked_path)
     if not m:
         raise Exception(f"Path {sked_path} did not match to ID regex, so we can't extract an ID")
