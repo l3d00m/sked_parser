@@ -117,7 +117,9 @@ def test_extract_id():
     faculty_short = "e"
     current_sem_str = "ws"
     extracted_semester = 1
-    def sked_path(part_str): return f"e/semester/{part_str}.html"
+
+    def sked_path(part_str):
+        return f"e/semester/{part_str}.html"
 
     # Simple string
     in_str = "eit"
@@ -138,10 +140,13 @@ def test_extract_id():
     assert create_id("e/E-IST.html", faculty_short, current_sem_str, extracted_semester) == "e_ist_1_ws"
     # Complicated semester specification
     in_str = "PSA_M_1. Semester_Schwerpunkt"
-    assert create_id(sked_path(in_str), faculty_short, current_sem_str,
-                     extracted_semester) == "e_psa_m_schwerpunkt_1_ws"
+    assert (
+        create_id(sked_path(in_str), faculty_short, current_sem_str, extracted_semester) == "e_psa_m_schwerpunkt_1_ws"
+    )
 
 
 def test_is_master():
-    def sked_path(part_str): return f"e/semester/{part_str}.html"
+    def sked_path(part_str):
+        return f"e/semester/{part_str}.html"
+
     assert guess_degree("", sked_path("b_stgrp_ma_glob_1")) == "Master"
