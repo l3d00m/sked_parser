@@ -1,4 +1,9 @@
-from sked_parser.scraper import create_id, extract_semester, optimize_label, guess_degree
+from sked_parser.scraper import (
+    create_id,
+    extract_semester,
+    optimize_label,
+    guess_degree,
+)
 
 
 def test_extract_semester_normal():
@@ -76,7 +81,6 @@ def test_extract_semester_url_no_digit_in_middle():
 def test_extract_semester_fachsemester_string():
     sem_str = "2. Fachsemester Smart Vehicle Systems"
     assert extract_semester(sem_str, "") == 2
-
 
 
 def test_optimize_label_strip_semester():
