@@ -97,6 +97,9 @@ def test_optimize_label_strip_semester():
     # Multiple semesters in one substring
     in_str = "Umwelttechnik - 3. - 4.  Semester"
     assert optimize_label(in_str, False) == "Umwelttechnik"
+    # Fachsemester statt Semester
+    in_str = "1. Fachsemester Smart Vehicle Systems"
+    assert optimize_label(in_str, False) == "Smart Vehicle Systems"
     # Semester shorthand used
     in_str = "Wirtschaftsinformatik 5. Sem."
     assert optimize_label(in_str, False) == "Wirtschaftsinformatik"

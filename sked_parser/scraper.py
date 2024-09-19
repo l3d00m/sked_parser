@@ -156,7 +156,7 @@ def optimize_label(desc, uses_shorthand_syntax):
             additional_stuff = m.group(2).strip()
             desc = f"{shorthand} {additional_stuff}"
     # Remove any semester related information
-    desc = re.sub(r"(\d\. ?-)?-? ?\d\.?\W+Sem(?:ester|\.)?", "", desc)
+    desc = re.sub(r"(\d\. ?-)?-? ?\d\.?\W+(Fachs|S)em(?:ester|\.)?", "", desc)
     desc = desc.replace("Semester", "")
     # Strip any remaining single digits
     desc = re.sub(r"[_-]\d(?=_|$)", "", desc)
