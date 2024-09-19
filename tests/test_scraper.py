@@ -69,9 +69,14 @@ def test_extract_semester_url_digit_at_end():
 
 
 def test_extract_semester_url_no_digit_in_middle():
-    """Test that URL parsing with digit at end works"""
     url_str = "r/studentenset/23-2-r-b-rfs.html"
     assert extract_semester("Nothing in here", url_str) is None
+
+
+def test_extract_semester_fachsemester_string():
+    sem_str = "2. Fachsemester Smart Vehicle Systems"
+    assert extract_semester(sem_str, "") == 2
+
 
 
 def test_optimize_label_strip_semester():
