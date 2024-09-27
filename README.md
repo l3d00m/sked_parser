@@ -6,12 +6,12 @@ Parses Ostfalia University [`sked`](https://www.sked.de/) timetables into a JSON
 
 # Installation & Usage
 
-1. Install python>=3.9, git and pip
+1. Install python>=3.9, git and [uv](https://docs.astral.sh/uv/getting-started/installation/)
 2. Clone this repository: `git clone https://github.com/SplusEins/sked_parser.git` and `cd sked_parser`.
-3. Install the tool with pip from the cloned folder: `python -m pip install -e .`.
+3. Install the tool: `uv sync`.
 4. Copy `secrets.example.yaml` into `secrets.yaml` and fill it with your Ostfalia credentials.
 5. Add `sked_parser/config.yaml` with the current timetable URLs. See below for syntax reference.
-6. Run the tool by executing `sked-parser`. It'll then create the desired `timetables.json`.
+6. Run the tool by executing `uv run sked-parser`. It'll then create the desired `timetables.json`.
 
 ## `config.yaml` syntax reference
 
