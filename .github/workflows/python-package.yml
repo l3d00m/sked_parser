@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python package
+name: Build, test, lint
 
 on:
   push:
@@ -28,6 +28,8 @@ jobs:
       - name: Install the project
         run: uv sync --all-extras --dev
 
+      - name: Build project
+        run: uv build
       - name: Run tests
         run: uv run pytest tests
       - name: Run flake8
