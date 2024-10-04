@@ -33,7 +33,7 @@ jobs:
       - name: Run tests
         run: uv run pytest tests
       - name: Run ruff checks
-        run: ruff check --output-format=github .
-      - name: Running formatter
+        run: uv run ruff check --output-format=github .
+      - name: Running format
         run: |
-          ruff format --check .
+          uv run ruff format --check .
