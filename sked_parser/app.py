@@ -21,6 +21,15 @@ def raise_for_duplicated_ids(dict_to_check):
     if len(duplicated_ids) > 0:
         log.critical(f"Zwei oder mehr Pläne haben die gleiche ID bekommen: {duplicated_ids}")
 
+def remove_duplicated_urls(dict_to_check):
+    """ Remove all timetables entries that have a duplicated URL/skedPath. We always just use the first one. """
+    unique_urls = []
+    for item in dict_to_check:
+      if item["skedPath"] in unique_urls:
+          dict_to_check.remove(item)
+      else:
+          unique_urls.append(item["skedPath"])
+
 
 def is_valid_item(table, blacklist):
     """Returns whether a table is allowed in spluseins. Used for filtering some unwanted items (Klausurenpläne)"""
@@ -71,6 +80,7 @@ def main(config, secrets, out_files):
     tables = [table for table in tables if is_valid_item(table, set(config["timetable_blacklist"]))]
     # Sort first by faculty, then by master/bachelor, then by semester and last by alphabetical label
     tables = sorted(tables, key=lambda x: (x["faculty"], x["degree"], str(x["semester"]), x["label"], x["id"]))
+    remove_duplicated_urls(tables)
     raise_for_duplicated_ids(tables)
     for out_file in out_files:
         write_timetable_json(tables, out_file)
