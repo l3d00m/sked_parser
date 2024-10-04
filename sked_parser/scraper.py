@@ -42,7 +42,7 @@ def get_links(overview_url, auth, faculty=""):
             desc = this_url.text.strip()
             # Prepend the content of the previous paragraph to the description because it contains the real name of the plan
             if "Wirtschaft" in faculty:
-                desc = this_url.parent.parent.find('summary').text.strip() + " " + desc
+                desc = this_url.parent.parent.find("summary").text.strip() + " " + desc
             if "Recht" in faculty:
                 if this_url.parent.parent.name == "ol":
                     desc = this_url.parent.parent.previous + " " + desc

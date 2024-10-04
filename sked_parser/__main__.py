@@ -74,9 +74,7 @@ def main():
         secrets["user"] = secrets["sked"]["user"]
         secrets["pass"] = secrets["sked"]["pass"]
     if secrets["user"] is None or secrets["pass"] is None:
-        raise Exception(
-            "Please specify your Ostalia credentials either via a secrets.yaml file or via environment variables."
-        )
+        raise Exception("Please specify your Ostalia credentials either via a secrets.yaml file or via environment variables.")
 
     #
     if args.out_file is None:

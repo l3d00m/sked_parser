@@ -32,5 +32,8 @@ jobs:
         run: uv build
       - name: Run tests
         run: uv run pytest tests
-      - name: Run flake8
-        run: uv run flake8 sked_parser tests
+      - name: Run ruff checks
+        run: ruff check --output-format=github .
+      - name: Running formatter
+        run: |
+          ruff format --check .
