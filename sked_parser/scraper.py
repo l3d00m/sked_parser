@@ -18,7 +18,7 @@ session = requests.Session()
 session.headers.update({"User-Agent": "Sked parser for spluseins.de", "From": "team@spluseins.de"})
 
 
-def get_links(overview_url, auth, faculty=""):
+def get_links(overview_url: str, auth, faculty=""):
     """Scrape all valid timetable URLS from `overview_url`.
 
     Args:
@@ -27,39 +27,42 @@ def get_links(overview_url, auth, faculty=""):
         faculty (str): Faculty name. Is used for applying special scrapers based on the faculty. Defaults to "".
 
     Returns:
-        Set[Tuple]: List of tuples with (url description, sked path)
+        Set[Tuple]: List of tuples with (url description, absolute url)
     """
     resp = session.get(overview_url, auth=HTTPBasicAuth(auth["user"], auth["pass"]))
     soup = BeautifulSoup(resp.content, "lxml")
-    tables = set()
-    valid_url_regex = re.compile(r"^\w/.+\.(html|csv)$", re.IGNORECASE)
-    for this_url in soup.find_all("a", href=True):
-        absolute_url = urljoin(overview_url, this_url["href"])
-        part_url = absolute_url.removeprefix("https://stundenplan.ostfalia.de/")
-        if part_url.endswith("index.html"):
+    tables: set[tuple[str, str]] = set()
+    if "Informatik" in faculty:
+        valid_url_regex = re.compile(r"^https://intranet-i.ostfalia.de/fips/stundenplan/\d+\.html$", re.IGNORECASE)
+    else:
+        valid_url_regex = re.compile(r"^https://stundenplan.ostfalia.de/\w/.+\.(html|csv)$", re.IGNORECASE)
+    for anchor_tag_href in soup.find_all("a", href=True):
+        absolute_url: str = urljoin(overview_url, anchor_tag_href["href"])
+        if absolute_url.endswith("index.html"):
             continue
-        if valid_url_regex.match(part_url):
-            desc = this_url.text.strip()
+        if valid_url_regex.match(absolute_url):
+            desc: str = anchor_tag_href.text.strip()
             # Prepend the content of the previous paragraph to the description because it contains the real name of the plan
             if "Wirtschaft" in faculty:
-                desc = this_url.parent.parent.find("summary").text.strip() + " " + desc
+                desc = anchor_tag_href.parent.parent.find("summary").text.strip() + " " + desc
             if "Recht" in faculty:
-                if this_url.parent.parent.name == "ol":
-                    desc = this_url.parent.parent.previous + " " + desc
-            tables.add((desc, part_url))
+                if anchor_tag_href.parent.parent.name == "ol":
+                    desc = anchor_tag_href.parent.parent.previous + " " + desc
+            tables.add((desc, absolute_url))
     return tables
 
 
-def create_id(sked_path, faculty_short, current_sem_str, extracted_semester):
+def create_id(sked_path, faculty_short, current_sem_str, extracted_semester, label=""):
     """Create a unique ID from the `sked_path` (timetable URL) and keep it as short as possible while maintaining readability"""
     # Unqoute the URL first
     sked_path = unquote(sked_path)
     # Get a basic id from the url page, which is the last part excluding the .extension
     id_re = re.compile(r"\w/(?:.*/)?(.+?)\.+(html|csv)", re.IGNORECASE)
     m = id_re.search(sked_path)
-    if not m:
-        raise Exception(f"Path {sked_path} did not match to ID regex, so we can't extract an ID")
-    sked_id = m.group(1).lower().strip()
+    if m:
+        sked_id = m.group(1).lower().strip()
+    else:
+        sked_id = label.lower().strip()
 
     # Replace any non alphanumeric chars with underscore and remove duplicated underscores
     sked_id = re.sub(r"\W+", "_", sked_id, flags=re.ASCII)
@@ -127,12 +130,14 @@ def extract_semester(desc, url):
         return None
 
 
-def get_faculty_shortcode(sked_path):
-    """Extract the faculty one letter shortcode from the provided sked path"""
+def get_faculty_shortcode(desc, sked_path):
+    """Extract the faculty one letter shortcode from the link description or the provided sked path"""
     shortcode = sked_path.split("/")[0]
-    if len(shortcode) != 1 or not shortcode.isalpha():
-        raise Exception("Could not get faculty shorthand from sked path")
-    return shortcode
+    if len(shortcode) == 1 or shortcode.isalpha():
+        return shortcode
+    if "Informatik" in desc or "Digital Technologies" in desc or "Wirtschaftsinformatik" in desc:
+        return "i"
+    raise Exception("Could not get faculty shorthand from sked path")
 
 
 def optimize_label(desc, uses_shorthand_syntax):

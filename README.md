@@ -46,7 +46,7 @@ It's also possible to specify the Ostfalia credentials via `OSTFALIA_USER` and `
 
 # How it works
 
-The single timetable are scraped from each specified timetable overview page. The link of that timetable (called `skedPath` in SplusEins) and its description/label are then stored and further processed:
+The single timetable are scraped from each specified timetable overview page. The link of that timetable (called `timetablePath` in SplusEins) and its description/label are then stored and further processed:
 
 ## Label optimization
 

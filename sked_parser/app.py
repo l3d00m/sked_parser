@@ -23,26 +23,26 @@ def raise_for_duplicated_ids(dict_to_check):
 
 
 def remove_duplicated_urls(dict_to_check):
-    """Remove all timetables entries that have a duplicated URL/skedPath. We always just use the first one."""
+    """Remove all timetables entries that have a duplicated URL/timetablePath. We always just use the first one."""
     unique_urls = []
     for item in dict_to_check:
-        if item["skedPath"] in unique_urls:
+        if item["timetablePath"] in unique_urls:
             dict_to_check.remove(item)
         else:
-            unique_urls.append(item["skedPath"])
+            unique_urls.append(item["timetablePath"])
 
 
 def is_valid_item(table, blacklist):
     """Returns whether a table is allowed in spluseins. Used for filtering some unwanted items (Klausurenpläne)"""
-    if table["faculty"] == "Elektrotechnik" and "block" in table["skedPath"].lower():
+    if table["faculty"] == "Elektrotechnik" and "block" in table["timetablePath"].lower():
         # Blockveranstaltungen (Fakultät E) erstmal raus
         return False
     if table["faculty"] == "Soziale Arbeit" and "fernstudiengang" in table["label"].lower():
         # schlechte formatierung, wird ignoriert
         return False
     for forbidden in blacklist:
-        if forbidden.lower() in table["skedPath"].lower():
-            log.info("Skipping timetable with forbidden path: " + table["skedPath"])
+        if forbidden.lower() in table["timetablePath"].lower():
+            log.info("Skipping timetable with forbidden path: " + table["timetablePath"])
             return False
         if forbidden.lower() in table["label"].lower():
             log.info("Skipping timetable with forbidden label: " + table["label"])
@@ -56,19 +56,23 @@ def main(config, secrets, out_files):
         tuples = scraper.get_links(plan["url"], secrets, plan["faculty"])
         if len(tuples) == 0:
             log.warning(f"URL {plan['url']} hat keine Pläne.")
-        for label, sked_path in tuples:
+        for label, absolute_path in tuples:
             label = label.replace("\n", " ").replace("\r", " ")  # for logging purposes
-            faculty_short = scraper.get_faculty_shortcode(sked_path)
+            if "Informatik" in plan["faculty"]:
+                sked_path = ""
+            else:
+                sked_path = absolute_path.removeprefix("https://stundenplan.ostfalia.de/")
+            faculty_short = scraper.get_faculty_shortcode(label, sked_path)
             degree = scraper.guess_degree(label, sked_path)
             semester = scraper.extract_semester(label, sked_path) or "Sonstige"
-            sked_id = scraper.create_id(sked_path, faculty_short, config["current_sem"], semester)
+            sked_id = scraper.create_id(sked_path, faculty_short, config["current_sem"], semester, label)
             label = scraper.optimize_label(label, plan.get("shorthand_syntax", False))
             plan_type = plan.get("type", "graphical")
             if "alt" in sked_path:
                 label += " alt"
             tables.append(
                 dict(
-                    skedPath=sked_path,
+                    timetablePath=absolute_path,
                     label=label,
                     faculty=plan["faculty"],
                     type=plan_type,
